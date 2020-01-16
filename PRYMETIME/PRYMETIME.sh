@@ -89,11 +89,9 @@ if [[ "$VERBOSE" = "yes" ]]; then
     set -x
 fi
 
-# flye_job=$(sbatch --parsable $EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR")
 $EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
-SLURM_DEP="-d afterok:$flye_job"
-sorter_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/sorter.sh "$OUTDIR" )
+$EXECDIR/sorter.sh "$OUTDIR"
 
 SLURM_DEP="-d afterok:$sorter_job"
 medaka_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka")

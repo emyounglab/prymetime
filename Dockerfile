@@ -22,7 +22,6 @@ RUN apt-get -y update && \
 # supports Python 3?
 RUN pip install git+https://github.com/fenderglass/Flye@2.4.2
 
-
 # ----------------------------------------------------------------------
 #
 # Now construct the final docker image without all of the development
@@ -31,10 +30,15 @@ RUN pip install git+https://github.com/fenderglass/Flye@2.4.2
 # ----------------------------------------------------------------------
 FROM ubuntu:focal
 
+# sorter needs pandas and biopython
+
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
       python \
+      python3 \
+      python3-biopython \
+      python3-pandas \
       && \
     apt-get clean
 

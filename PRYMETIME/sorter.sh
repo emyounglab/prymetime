@@ -5,6 +5,7 @@
 #SBATCH -e sorter_%j.err
 #SBATCH -J sorter_merge
 
-cp sorter.py "$1"
+EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+cp "${EXECDIR}/sorter.py" "$1"
 cd "$1"
-python sorter.py
+python3 sorter.py
