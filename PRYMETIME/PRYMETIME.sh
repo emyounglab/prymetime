@@ -93,8 +93,7 @@ $EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
 $EXECDIR/sorter.sh "$OUTDIR"
 
-SLURM_DEP="-d afterok:$sorter_job"
-medaka_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka")
+$EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
 
 SLURM_DEP="-d afterok:$medaka_job"
 illumina_merge_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq" )
