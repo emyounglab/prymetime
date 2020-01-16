@@ -65,7 +65,7 @@ if [[ ! -f "$IN_FASTQ_ILLUMINA_2" ]]; then
 fi
 
 if [[ -z "$OUTDIR" ]]; then
-	OUTDIR="$(mkdir $EXECDIR/$OUTDIR)"
+	OUTDIR=/output
 	echo "WARNING: -outdir not specified; outputting to $OUTDIR" >&2
 else
 	OUTDIR="$OUTDIR"
@@ -78,14 +78,19 @@ fi
 
 #fail if there's a typo in variable names
 set -u
+#fail if any command fails
+set -e
 
 #REAL PART OF SCRIPT BEGINS HERE
 
 if [[ "$VERBOSE" = "yes" ]]; then
 	echo "Submitting jobs" >&2
+    set -v
+    set -x
 fi
 
-flye_job=$(sbatch --parsable $EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR")
+# flye_job=$(sbatch --parsable $EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR")
+$EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
 SLURM_DEP="-d afterok:$flye_job"
 sorter_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/sorter.sh "$OUTDIR" )
