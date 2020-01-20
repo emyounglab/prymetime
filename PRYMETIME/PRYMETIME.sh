@@ -97,8 +97,7 @@ $EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/med
 
 $EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq"
 
-SLURM_DEP="-d afterok:$illumina_merge_job"
-minimap_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam")
+$EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam"
 
 SLURM_DEP="-d afterok:$minimap_job"
 racon_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta" )
