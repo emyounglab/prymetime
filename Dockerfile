@@ -100,6 +100,7 @@ FROM ubuntu:bionic
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
+      bwa \
       libcurl4-gnutls-dev \
       python \
       python3 \
