@@ -6,4 +6,5 @@
 #SBATCH -e illumina_merge_%j.err
 #SBATCH -J illumina_merge
 
-python racon_merge.py "$1" "$2" > "$3"
+EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+python "${EXECDIR}/racon_merge.py" "$1" "$2" > "$3"

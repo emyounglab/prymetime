@@ -78,6 +78,14 @@ RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9
 # 2020. This ties us to Ubuntu 18.04.
 RUN pip3 install medaka
 
+# Install racon
+RUN git clone --recursive https://github.com/isovic/racon.git racon \
+    && cd racon \
+    && mkdir build \
+    && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release .. \
+    && make \
+    && make install
 
 # ----------------------------------------------------------------------
 #
