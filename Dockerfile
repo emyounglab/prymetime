@@ -101,6 +101,7 @@ RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
       bwa \
+      default-jdk-headless \
       libcurl4-gnutls-dev \
       python \
       python3 \
@@ -110,6 +111,9 @@ RUN apt-get -y update && \
     apt-get clean
 
 COPY --from=build /usr/local /usr/local
+
+# pilon
+ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/lib
 
 # Add the entrypoint script
 COPY PRYMETIME /usr/local/bin/prymetime

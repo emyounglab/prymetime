@@ -102,8 +102,8 @@ $EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fas
 $EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
     "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta"
 
-SLURM_DEP="-d afterok:$racon_job"
-pilon_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/pilon.bam" "$OUTDIR/pilon" "$OUTDIR" )
+$EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
+    "$OUTDIR/pilon.bam" "$OUTDIR/pilon" "$OUTDIR"
 
 SLURM_DEP="-d afterok:$pilon_job"
 nucmer_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/nucmer.sh "$OUTDIR" )
