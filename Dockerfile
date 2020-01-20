@@ -15,11 +15,9 @@ RUN apt-get -y update && \
       libncurses5-dev \
       libssl-dev \
       make \
-      mummer \
       perl \
       python-pip \
       python3-pip \
-      python3-pymummer \
       wget \
       zlib1g-dev \
       && \
@@ -107,6 +105,7 @@ RUN apt-get -y update && \
       python3 \
       python3-biopython \
       python3-pandas \
+      python3-pymummer \
       && \
     apt-get clean
 

@@ -5,6 +5,7 @@
 #SBATCH -e nucmer_%j.err
 #SBATCH -J nucmer
 
-cp nucmer4.py "$1"
+EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+cp "${EXECDIR}/nucmer4.py" "$1"
 cd "$1"
-python nucmer4.py
+python3 nucmer4.py

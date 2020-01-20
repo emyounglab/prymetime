@@ -105,8 +105,7 @@ $EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
 $EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
     "$OUTDIR/pilon.bam" "$OUTDIR/pilon" "$OUTDIR"
 
-SLURM_DEP="-d afterok:$pilon_job"
-nucmer_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/nucmer.sh "$OUTDIR" )
+$EXECDIR/nucmer.sh "$OUTDIR"
 
 SLURM_DEP="-d afterok:$nucmer_job"
 split_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/split.sh "$OUTDIR" )
