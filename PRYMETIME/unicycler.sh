@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH -p long
@@ -7,6 +7,12 @@
 #SBATCH -o unicycler_%j.out
 #SBATCH -e unicycler_%j.err
 #SBATCH -J unicycler
+
+#fail if there's a typo in variable names
+set -u
+#fail if any command fails
+set -e
+
 
 cd "$4"
 cd unicycler

@@ -85,6 +85,24 @@ RUN git clone --recursive https://github.com/isovic/racon.git racon \
     && make \
     && make install
 
+# Install Unicycler
+RUN pip3 install git+https://github.com/rrwick/Unicycler.git
+
+# Install fastq_pair
+RUN curl -s -L https://github.com/linsalrob/fastq-pair/archive/v1.0.tar.gz | tar xzf - \
+    && cd fastq-pair-1.0 \
+    && mkdir build \
+    && cd build \
+    && cmake ../ \
+    && make \
+    && make install
+
+# Install SPAdes for unicycler
+RUN curl -s http://cab.spbu.ru/files/release3.14.0/SPAdes-3.14.0-Linux.tar.gz | tar xzf - \
+    && cd SPAdes-3.14.0-Linux \
+    && cp bin/* /usr/local/bin/ \
+    && cp -r share/* /usr/local/share/
+
 # ----------------------------------------------------------------------
 #
 # Now construct the final docker image without all of the development
@@ -98,21 +116,25 @@ FROM ubuntu:bionic
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
+      bowtie2 \
       bwa \
       default-jdk-headless \
       libcurl4-gnutls-dev \
+      ncbi-blast+ \
       python \
       python3 \
       python3-biopython \
       python3-pandas \
       python3-pymummer \
+      zlib1g \
       && \
     apt-get clean
 
 COPY --from=build /usr/local /usr/local
 
 # pilon
-ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/lib
+ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
+ADD pilon /usr/local/bin
 
 # Add the entrypoint script
 COPY PRYMETIME /usr/local/bin/prymetime
