@@ -107,8 +107,7 @@ $EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
 
 $EXECDIR/nucmer.sh "$OUTDIR"
 
-SLURM_DEP="-d afterok:$nucmer_job"
-split_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/split.sh "$OUTDIR" )
+$EXECDIR/split.sh "$OUTDIR"
 
 SLURM_DEP="-d afterok:$split_job"
 uni_job=$(sbatch --parsable $SLURM_DEP $EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR" )

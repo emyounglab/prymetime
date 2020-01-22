@@ -5,6 +5,12 @@
 #SBATCH -e split_%j.err
 #SBATCH -J split
 
+#fail if there's a typo in variable names
+set -u
+#fail if any command fails
+set -e
+
+
 cd "$1"
 mkdir unicycler
 cp cir_rep_contigs.fasta unicycler/
