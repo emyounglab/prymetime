@@ -1,5 +1,7 @@
 # PRYMETIME
 
+PRYMETIME is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast strains. PRYMETIME relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs.
+
 ## Docker
 
 ### Build Image
@@ -41,3 +43,18 @@ docker run -it --rm \
     --entrypoint /bin/bash \
     prymetime:0.1
 ```
+
+### Detailed PRYMETIME genome assembly pipeline
+
+### Supporting software
+PRYMETIME utilizes the following software packages:
+* [Flye](https://github.com/fenderglass/Flye)
+* [Medaka](https://github.com/nanoporetech/medaka)
+* [Racon](https://github.com/lbcb-sci/racon)
+* [Pilon](https://github.com/broadinstitute/pilon)
+* [Unicycler](https://github.com/rrwick/Unicycler)
+* [Minimap2](https://github.com/lh3/minimap2)
+* [BWA](https://github.com/lh3/bwa)
+* [Samtools](https://github.com/samtools/samtools)
+* [Fastq-pair](https://github.com/linsalrob/fastq-pair)
+* [Mummer](https://github.com/mummer4/mummer)
