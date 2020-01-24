@@ -46,6 +46,9 @@ docker run -it --rm \
 
 ### Detailed PRYMETIME genome assembly pipeline
 
+![PRYMETIME pipeline](/docs/PRYMETIME_pipeline_description.pdf)
+Format: ![Alt Text](url)
+
 ### Supporting software
 PRYMETIME utilizes the following software packages:
 * [Flye](https://github.com/fenderglass/Flye)
