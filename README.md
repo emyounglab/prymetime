@@ -46,7 +46,7 @@ docker run -it --rm \
 
 ### Detailed PRYMETIME genome assembly pipeline
 
-![PRYMETIME_pipeline](https://github.com/jcollins1x/PRYMETIME/blob/master/docs/PRYMETIME_pipeline_description.pdf)
+![PRYMETIME_pipeline](https://github.com/jcollins1x/PRYMETIME/blob/master/docs/PRYMETIME_pipeline_description.png)
 
 ### Supporting software
 PRYMETIME utilizes the following software packages:
