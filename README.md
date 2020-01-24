@@ -60,3 +60,7 @@ PRYMETIME utilizes the following software packages:
 * [Samtools](https://github.com/samtools/samtools)
 * [Fastq-pair](https://github.com/linsalrob/fastq-pair)
 * [Mummer](https://github.com/mummer4/mummer)
+
+### Publication
+
+Joseph H. Collins, Kevin W. Keating, Trent R. Jones, Shravani Balaji, Celeste B. Marsan, Marina Como, Zachary J. Newlon, Tom Mitchell, Aaron Adler, Nicholas Roehner, and Eric M. Young. Resolving signatures of engineering in Saccharomyces cerevisiae and nonconventional yeasts with whole genome sequencing. In preparation. (2020).
