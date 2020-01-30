@@ -8,13 +8,7 @@
 docker build --tag prymetime:0.1 .
 ```
 
-### Run container interactively
-
-```shell
-docker run -it --rm prymetime:0.1
-```
-
-### Run container with some data
+### Run container with data
 
 Mount a directory with the `-v` flag. The directory before the `:`
 must be an absolute path to a file or directory, and the directory
@@ -24,8 +18,13 @@ after the `:` is where it will be mounted inside the container.
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetime:0.1
+    prymetime:0.1 \
+    -nanopore /input/my_nanopore.fastq \
+    -illumina_1 /input/my_illumina_1.fastq \
+    -illumina_2 /input/my_illumina_2.fastq
 ```
+
+
 
 # Run the docker container interactively
 
