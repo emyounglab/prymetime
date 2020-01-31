@@ -116,7 +116,6 @@ RUN apt-get -y update && \
       default-jdk-headless \
       libcurl4-gnutls-dev \
       ncbi-blast+ \
-      python \
       python3 \
       python3-biopython \
       python3-pandas \
