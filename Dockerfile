@@ -16,19 +16,14 @@ RUN apt-get -y update && \
       libssl-dev \
       make \
       perl \
-      python-pip \
       python3-pip \
       wget \
       zlib1g-dev \
       && \
     apt-get clean
 
-# Install Flye 2.4.2
-#
-# Use Flye version 2.4.2 per Joe @ WPI. Flye 2.4.2 requires Python
-# 2. Can we update to use Flye 2.6 which is a new release that
-# supports Python 3?
-RUN pip install git+https://github.com/fenderglass/Flye@2.4.2
+# Install Flye 2.6
+RUN pip3 install git+https://github.com/fenderglass/Flye@2.6
 
 # Install Medaka (https://github.com/nanoporetech/medaka)
 
