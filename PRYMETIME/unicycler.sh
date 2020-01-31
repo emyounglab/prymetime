@@ -34,9 +34,4 @@ cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
 cd ../
 
-cat unicycler_contigs.fasta polished_contigs.fasta > "$4"_final.fasta
-
-
-
-
-
+cat unicycler_contigs.fasta polished_contigs.fasta > "$4"/assembly_final.fasta
