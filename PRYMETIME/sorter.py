@@ -17,7 +17,7 @@ df = pd.read_csv("assembly_info.txt",sep='\t')
 circ_D = {}
 
 for x in range(0, len(df.index)):
-    circ_D[df.loc[x,"seq_name"]] = df.loc[x,"circ."]
+    circ_D[df.loc[x,"#seq_name"]] = df.loc[x,"circ."]
 
 ### Make a fasta file of only the circular contigs ###
 ######################################################
