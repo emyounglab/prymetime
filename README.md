@@ -7,7 +7,7 @@ PRYMETIME is a de novo genome assembly pipeline that uses long reads from Oxford
 ### Build Image
 
 ```shell
-docker build --tag prymetime:0.1 .
+docker build --tag prymetime:0.2 .
 ```
 
 ### Run container with data
@@ -20,7 +20,7 @@ after the `:` is where it will be mounted inside the container.
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetime:0.1 \
+    prymetime:0.2 \
     -nanopore /input/my_nanopore.fastq \
     -illumina_1 /input/my_illumina_1.fastq \
     -illumina_2 /input/my_illumina_2.fastq
@@ -40,7 +40,7 @@ docker run -it --rm \
     -v $(realpath ../wpi-data):/input \
     -v $(realpath output):/output \
     --entrypoint /bin/bash \
-    prymetime:0.1
+    prymetime:0.2
 ```
 
 ### Detailed PRYMETIME genome assembly pipeline
