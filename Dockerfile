@@ -80,8 +80,8 @@ RUN git clone --recursive https://github.com/isovic/racon.git racon \
     && make \
     && make install
 
-# Install Unicycler 0.4.4
-RUN pip3 install git+https://github.com/rrwick/Unicycler.git@v0.4.4
+# Install Unicycler 0.4.8
+RUN pip3 install git+https://github.com/rrwick/Unicycler.git@v0.4.8
 
 # Install fastq_pair
 RUN curl -s -L https://github.com/linsalrob/fastq-pair/archive/v1.0.tar.gz | tar xzf - \
