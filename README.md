@@ -1,6 +1,6 @@
-# PRYMETIME
+# Prymetime
 
-PRYMETIME is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast strains. PRYMETIME relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs.
+Prymetime is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast strains. Prymetime relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs.
 
 ## Docker
 
@@ -48,7 +48,7 @@ docker run -it --rm \
 ![PRYMETIME_pipeline](https://github.com/jcollins1x/PRYMETIME/blob/master/docs/PRYMETIME_pipeline_description.png)
 
 ### Supporting software
-PRYMETIME utilizes the following software packages:
+Prymetime utilizes the following software packages:
 * [Flye](https://github.com/fenderglass/Flye)
 * [Medaka](https://github.com/nanoporetech/medaka)
 * [Racon](https://github.com/lbcb-sci/racon)
@@ -62,4 +62,4 @@ PRYMETIME utilizes the following software packages:
 
 ### Publication
 
-Joseph H. Collins, Kevin W. Keating, Trent R. Jones, Shravani Balaji, Celeste B. Marsan, Marina Como, Zachary J. Newlon, Tom Mitchell, Aaron Adler, Nicholas Roehner, and Eric M. Young. Resolving signatures of engineering in Saccharomyces cerevisiae and nonconventional yeasts with whole genome sequencing. In preparation. (2020).
+Joseph H. Collins, Kevin W. Keating, Trent R. Jones, Shravani Balaji, Celeste B. Marsan, Marina Como, Zachary J. Newlon, Tom Mitchell, Bryan Bartley, Aaron Adler, Nicholas Roehner, and Eric M. Young. Verification of genetic engineering in yeasts with nanopore whole genome sequencing. In preparation. (2020).
