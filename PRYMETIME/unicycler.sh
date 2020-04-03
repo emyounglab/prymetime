@@ -34,4 +34,6 @@ cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
 cd ../
 
-cat unicycler_contigs.fasta polished_contigs.fasta > "$4"/assembly_final.fasta
+cat unicycler_contigs.fasta polished_contigs.fasta > "$4"_comb.fasta
+
+seqkit rename "$4"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$4"_final.fasta
