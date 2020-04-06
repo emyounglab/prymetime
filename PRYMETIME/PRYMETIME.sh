@@ -5,7 +5,7 @@ EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
 function usage {
         cat <<EOF
-Usage: $0 [-help] [-verbose] [-nanopore <file>] [-illumina_1 <file>] [-illumina_2 <file>] [-outdir <dir>] [-genome-size <size>]
+Usage: $0 [-help] [-verbose] [-nanopore <file>] [-illumina_1 <file>] [-illumina_2 <file>] [-outdir <dir>] [-genome-size <size>] [-eng_sig <file>]
 Processes fastq nanopore plus illumina files
 
 	-help		Print Help
@@ -15,6 +15,7 @@ Processes fastq nanopore plus illumina files
 	-illumina_2	Paired-end read 2
 	-outdir		Specify an output directory
 	-genome-size	Specify genome size
+	-eng_sig	Fasta file with engineering signatures
 	-v	Verbose
 EOF
 }
@@ -30,6 +31,7 @@ while [ $# -gt 0 ]; do
 	-illumina_2)	shift;IN_FASTQ_ILLUMINA_2="$1";;
 	-outdir)	shift;OUTDIR="$1";;
 	-genome-size)	shift;GENOME_SIZE="$1";;
+	-eng_sig)	shift;ENG_SIG="$1";;
         -)     shift; break;;
         -*)
 		usage;
@@ -111,3 +113,7 @@ $EXECDIR/split.sh "$OUTDIR"
 
 $EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
     "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
+    
+$EXECDIR/eng_sig_blast.sh "$OUTDIR" "$ENG_SIG"
+
+$EXECDIR/eng_sig_figure.sh "$OUTDIR"
