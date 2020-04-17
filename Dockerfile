@@ -27,7 +27,7 @@ RUN pip3 install git+https://github.com/fenderglass/Flye@2.6
 
 # Install Medaka (https://github.com/nanoporetech/medaka)
 
-# Medaka depends on bgzip, minimap2, samtools, and tabix. Install
+# Medaka depends on bgzip, minimap2, samtools, bcftools, and tabix. Install
 # those dependencies.
 
 # Install minimap2 (https://github.com/lh3/minimap2)
@@ -63,6 +63,14 @@ RUN wget https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar
 RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
     && bunzip2 -c samtools-1.9.tar.bz2 | tar xf - \
     && cd samtools-1.9 \
+    && ./configure \
+    && make \
+    && make install
+    
+# Install bcftools
+RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2 \
+    && bunzip2 -c bcftools-1.10.2.tar.bz2 | tar xf - \
+    && cd bcftools-1.10.2 \
     && ./configure \
     && make \
     && make install
