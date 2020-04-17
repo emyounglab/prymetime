@@ -59,6 +59,7 @@ Prymetime utilizes the following software packages:
 * [Samtools](https://github.com/samtools/samtools)
 * [Fastq-pair](https://github.com/linsalrob/fastq-pair)
 * [Mummer](https://github.com/mummer4/mummer)
+* [karyoploteR](https://https://github.com/bernatgel/karyoploteR)
 
 ### Publication
 
