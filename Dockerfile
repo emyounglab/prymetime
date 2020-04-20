@@ -151,6 +151,10 @@ COPY --from=build /usr/local /usr/local
 COPY docker/install-karyoploteR.R /tmp/install-karyoploteR.R
 RUN R -f /tmp/install-karyoploteR.R
 
+# Install rtracklayer
+COPY docker/install-rtracklayer.R /tmp/install-rtracklayer.R
+RUN R -f /tmp/install-rtracklayer.R
+
 # pilon
 ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
 ADD pilon /usr/local/bin
