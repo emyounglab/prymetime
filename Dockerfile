@@ -103,6 +103,12 @@ RUN curl -s -L \
     https://github.com/shenwei356/seqkit/releases/download/v0.12.0/seqkit_linux_amd64.tar.gz \
     | tar -xzf - -C /usr/local/bin
 
+# Install Blast+ v2.10.0 in /usr/local
+RUN curl -s -L \
+    https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.0/ncbi-blast-2.10.0+-x64-linux.tar.gz \
+    | tar -xzf - -C /usr/local \
+    && ln -s /usr/local/ncbi-blast-2.10.0+/bin/* /usr/local/bin
+
 # ----------------------------------------------------------------------
 #
 # Now construct the final docker image without all of the development
@@ -140,7 +146,6 @@ RUN apt-get -y update && \
       libpng-dev \
       libssl-dev \
       libxml2-dev \
-      ncbi-blast+ \
       python3 \
       python3-biopython \
       python3-pandas \
