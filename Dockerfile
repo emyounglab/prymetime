@@ -98,6 +98,11 @@ RUN curl -s http://cab.spbu.ru/files/release3.14.0/SPAdes-3.14.0-Linux.tar.gz | 
     && cp bin/* /usr/local/bin/ \
     && cp -r share/* /usr/local/share/
 
+# Install seqkit v0.12.0 in /usr/local/bin
+RUN curl -s -L \
+    https://github.com/shenwei356/seqkit/releases/download/v0.12.0/seqkit_linux_amd64.tar.gz \
+    | tar -xzf - -C /usr/local/bin
+
 # ----------------------------------------------------------------------
 #
 # Now construct the final docker image without all of the development
