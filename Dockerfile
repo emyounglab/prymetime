@@ -141,6 +141,7 @@ RUN apt -y update && \
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
+      bioperl \
       bowtie2 \
       build-essential \
       bwa \
