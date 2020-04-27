@@ -106,6 +106,17 @@ RUN curl -s http://cab.spbu.ru/files/release3.14.0/SPAdes-3.14.0-Linux.tar.gz | 
     && cp bin/* /usr/local/bin/ \
     && cp -r share/* /usr/local/share/
 
+# Install seqkit v0.12.0 in /usr/local/bin
+RUN curl -s -L \
+    https://github.com/shenwei356/seqkit/releases/download/v0.12.0/seqkit_linux_amd64.tar.gz \
+    | tar -xzf - -C /usr/local/bin
+
+# Install Blast+ v2.10.0 in /usr/local
+RUN curl -s -L \
+    https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.0/ncbi-blast-2.10.0+-x64-linux.tar.gz \
+    | tar -xzf - -C /usr/local \
+    && ln -s /usr/local/ncbi-blast-2.10.0+/bin/* /usr/local/bin
+
 # ----------------------------------------------------------------------
 #
 # Now construct the final docker image without all of the development
@@ -114,25 +125,50 @@ RUN curl -s http://cab.spbu.ru/files/release3.14.0/SPAdes-3.14.0-Linux.tar.gz | 
 # ----------------------------------------------------------------------
 FROM ubuntu:bionic
 
-# sorter needs pandas and biopython
+# Add R package repository
+RUN apt -y update && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt -y --no-install-recommends install \
+      gnupg \
+      software-properties-common \
+    && \
+    apt-key adv --keyserver keyserver.ubuntu.com \
+      --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
+    && \
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
 
+# sorter needs pandas and biopython
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
+      bioperl \
       bowtie2 \
+      build-essential \
       bwa \
       default-jdk-headless \
+      gfortran \
+      libbz2-dev \
       libcurl4-gnutls-dev \
-      ncbi-blast+ \
+      libjpeg9-dev \
+      liblzma-dev \
+      libmariadbclient-dev \
+      libpng-dev \
+      libssl-dev \
+      libxml2-dev \
       python3 \
       python3-biopython \
       python3-pandas \
       python3-pymummer \
+      r-base \
       zlib1g \
       && \
     apt-get clean
 
 COPY --from=build /usr/local /usr/local
+
+# Install karyoploteR
+COPY docker/install-karyoploteR.R /tmp/install-karyoploteR.R
+RUN R -f /tmp/install-karyoploteR.R
 
 # pilon
 ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
