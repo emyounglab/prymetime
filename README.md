@@ -96,4 +96,4 @@ Prymetime utilizes the following software packages:
 
 ### Publication
 
-Joseph H. Collins, Kevin W. Keating, Trent R. Jones, Shravani Balaji, Celeste B. Marsan, Marina Como, Zachary J. Newlon, Tom Mitchell, Bryan Bartley, Aaron Adler, Nicholas Roehner, and Eric M. Young. Verification of genetic engineering in yeasts with nanopore whole genome sequencing. In preparation. (2020).
+A preprint of our Prymetime publication is available on BioRxiv: https://www.biorxiv.org/content/10.1101/2020.05.05.079368v1
