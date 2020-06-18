@@ -76,9 +76,9 @@ docker run -it --rm \
 
 The run time of Prymetime will depend highly on the computer or server used, and the size of the read libraries. On a desktop computer with a small 10X genome coverage read library, Prymetime took approximately 7 hours.
 
-### Detailed PRYMETIME genome assembly pipeline
+### Detailed Prymetime genome assembly pipeline
 
-![PRYMETIME_pipeline](https://github.com/emyounglab/prymetime/blob/master/docs/PRYMETIME_pipeline_description.png)
+![Prymetime_pipeline](https://github.com/emyounglab/prymetime/blob/master/docs/PRYMETIME_pipeline_description.png)
 
 ### Supporting software
 Prymetime utilizes the following software packages:
