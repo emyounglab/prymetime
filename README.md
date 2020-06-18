@@ -31,13 +31,13 @@ docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
     prymetime \
-    -nanopore /input/<my_nanopore.fastq> \
-    -illumina_1 /input/<my_illumina_1.fastq> \
-    -illumina_2 /input/<my_illumina_2.fastq>
-    -genome-size <approximate genome size in bp>
-    -outdir /output/<my_directory>
+    -nanopore /input/my_nanopore.fastq \
+    -illumina_1 /input/my_illumina_1.fastq> \
+    -illumina_2 /input/my_illumina_2.fastq
+    -genome-size my_genome_size
+    -outdir /output/my_directory
 ```
-The final genome assembly will be the <my_directory>_final.fasta file.
+The final genome assembly will be the my_directory_final.fasta file.
 
 Run Prymetime with engineering signatures search
 ```shell
@@ -45,12 +45,12 @@ docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
     prymetime \
-    -nanopore /input/<my_nanopore.fastq> \
-    -illumina_1 /input/<my_illumina_1.fastq> \
-    -illumina_2 /input/<my_illumina_2.fastq>
-    -genome-size <approximate genome size in bp>
-    -outdir /output/<my_directory>
-    -eng_sig /input/<my_eng_sig.fasta>
+    -nanopore /input/my_nanopore.fastq \
+    -illumina_1 /input/my_illumina_1.fastq \
+    -illumina_2 /input/my_illumina_2.fastq
+    -genome-size my_genome_size
+    -outdir /output/my_directory
+    -eng_sig /input/my_eng_sig.fasta
 ```
 
 The -eng_sig option will also produce a PDF displaying engineering signatures that were found in the genome assembly, shown below:
