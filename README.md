@@ -2,12 +2,17 @@
 
 Prymetime is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast strains. Prymetime relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs.
 
-## Docker
+All software requirements for Prymetime have been packaged together into a Docker image. Docker is available freely here: https://hub.docker.com/search?offering=community&type=edition
 
-### Build Image
+## Build Docker image
 
+Download Docker image
 ```shell
-docker build --tag prymetime:0.2 .
+git clone https://github.com/emyounglab/prymetime.git
+```
+Build Docker image
+```shell
+docker build --tag prymetime prymetime
 ```
 
 ### Run container with data
@@ -20,13 +25,11 @@ after the `:` is where it will be mounted inside the container.
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetime:0.2 \
+    prymetime \
     -nanopore /input/my_nanopore.fastq \
     -illumina_1 /input/my_illumina_1.fastq \
     -illumina_2 /input/my_illumina_2.fastq
 ```
-
-
 
 # Run the docker container interactively
 
@@ -40,7 +43,7 @@ docker run -it --rm \
     -v $(realpath ../wpi-data):/input \
     -v $(realpath output):/output \
     --entrypoint /bin/bash \
-    prymetime:0.2
+    prymetime
 ```
 
 ### Detailed PRYMETIME genome assembly pipeline
