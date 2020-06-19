@@ -13,7 +13,7 @@ set -u
 #fail if any command fails
 set -e
 
-
+PREFIX=$(basename "$4")
 cd "$4"
 cd unicycler
 
@@ -34,6 +34,6 @@ cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
 cd ../
 
-cat unicycler_contigs.fasta polished_contigs.fasta > "$4"_comb.fasta
+cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
 
-seqkit rename "$4"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$4"_final.fasta
+seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
