@@ -18,4 +18,4 @@ bp_search2gff --input "$PREFIX"_blastn.txt --addid --version 3 --type hit -o "$P
 
 samtools faidx "$PREFIX"_final.fasta
 
-awk 'BEGIN {FS="\t"}; {print $PREFIX FS "1" FS $2}' "$PREFIX"_final.fasta.fai > "$PREFIX"_final.bed
+awk 'BEGIN {FS="\t"}; {print $1 FS "1" FS $2}' "$PREFIX"_final.fasta.fai > "$PREFIX"_final.bed
