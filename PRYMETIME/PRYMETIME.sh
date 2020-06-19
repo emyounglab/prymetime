@@ -114,6 +114,9 @@ $EXECDIR/split.sh "$OUTDIR"
 $EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
     "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
     
-$EXECDIR/eng_sig_blast.sh "$OUTDIR" "$ENG_SIG"
+# if ENG_SIG argument was provided, do some more work
+if [ ! -z ${ENG_SIG+x} ]; then
+    $EXECDIR/eng_sig_blast.sh "$OUTDIR" "$ENG_SIG"
 
-$EXECDIR/eng_sig_figure.sh "$OUTDIR"
+    $EXECDIR/eng_sig_figure.sh "$OUTDIR"
+fi
