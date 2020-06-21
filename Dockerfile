@@ -160,6 +160,7 @@ RUN apt-get -y update && \
       libxml2-dev \
       python3 \
       python3-biopython \
+      python3-idna \
       python3-pandas \
       python3-pymummer \
       r-base \
