@@ -194,6 +194,7 @@ RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
 
 # Install chromoMap
 RUN R -e "install.packages('chromoMap', repos = 'http://cran.us.r-project.org')"
+RUN R -e "install.packages('htmltools', repos = 'http://cran.us.r-project.org')"
 
 # pilon
 ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
