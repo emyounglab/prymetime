@@ -19,20 +19,11 @@ circ_D = {}
 for x in range(0, len(df.index)):
     circ_D[df.loc[x,"#seq_name"]] = df.loc[x,"circ."]
 
-### Make a dictionary of repetitive or linear from Flye output info file ###
-##########################################################################
-df = pd.read_csv("assembly_info.txt",sep='\t')
-
-rep_D = {}
-
-for x in range(0, len(df.index)):
-    rep_D[df.loc[x,"#seq_name"]] = df.loc[x,"repeat"]
-
-### Make a fasta file of only the circular and repetitive contigs ###
+### Make a fasta file of only the circular contigs ###
 ######################################################
 fasta_sequences = SeqIO.parse(open("assembly.fasta"),'fasta')
 
-cir_seqs = [x for x in fasta_sequences if circ_D[x.id] is "+" or rep_D[x.id] is "+"]
+cir_seqs = [x for x in fasta_sequences if circ_D[x.id] is "Y"]
 
 SeqIO.write(cir_seqs , "cir_contigs.fasta", "fasta")
 
@@ -40,8 +31,6 @@ SeqIO.write(cir_seqs , "cir_contigs.fasta", "fasta")
 ####################################################
 fasta_sequences = SeqIO.parse(open("assembly.fasta"),'fasta')
 
-lin_seqs = [x for x in fasta_sequences if circ_D[x.id] is '-' and rep_D[x.id] is '-']
+lin_seqs = [x for x in fasta_sequences if circ_D[x.id] is 'N']
 
 SeqIO.write(lin_seqs , "lin_contigs.fasta", "fasta")
-
-
