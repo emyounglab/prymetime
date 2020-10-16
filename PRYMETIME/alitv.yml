@@ -1,0 +1,49 @@
+---
+genomes: 
+   -
+    name: Reference
+    sequence_files:
+      - reference.fasta
+    feature_files:
+      eng_sig: 
+             - eng_sig.tsv
+      telomere: 
+             - telomere.tsv
+      centromere: 
+             - centromere.tsv
+      mitochondrion: 
+             - mitochondrion.tsv
+   - 
+     name: Prymetime
+     sequence_files:
+      - prymetime_assembly.fasta
+     feature_files:
+       eng_sig: 
+             - eng_sig.tsv
+       telomere: 
+             - telomere.tsv
+       centromere: 
+             - centromere.tsv
+       mitochondrion: 
+             - mitochondrion.tsv
+features:
+  eng_sig:
+    color: "#FF0000"
+    form: rect
+    height: 30
+    visible: 1
+  telomere:
+    color: "#0000FF"
+    form: rect
+    height: 30
+    visible: 1
+  centromere:
+    color: "#008000"
+    form: rect
+    height: 30
+    visible: 1
+  mitochondrion:
+    color: "#FFFF00"
+    form: rect
+    height: 30
+    visible: 1
