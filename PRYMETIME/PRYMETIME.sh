@@ -5,7 +5,7 @@ EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
 function usage {
         cat <<EOF
-Usage: $0 [-help] [-verbose] [-nanopore <file>] [-illumina_1 <file>] [-illumina_2 <file>] [-outdir <dir>] [-genome-size <size>] [-eng_sig <file>]
+Usage: $0 [-help] [-verbose] [-nanopore <file>] [-illumina_1 <file>] [-illumina_2 <file>] [-outdir <dir>] [-genome-size <size>] [-eng_sig <file>] [-ref_genome <file>]
 Processes fastq nanopore plus illumina files
 
 	-help		Print Help
@@ -16,6 +16,7 @@ Processes fastq nanopore plus illumina files
 	-outdir		Specify an output directory
 	-genome-size	Specify genome size
 	-eng_sig	Fasta file with engineering signatures
+	-ref_genome	Reference genome fasta file for comparison
 	-v	Verbose
 EOF
 }
@@ -32,6 +33,7 @@ while [ $# -gt 0 ]; do
 	-outdir)	shift;OUTDIR="$1";;
 	-genome-size)	shift;GENOME_SIZE="$1";;
 	-eng_sig)	shift;ENG_SIG="$1";;
+	-ref_genome)	shift;REF_GENOME="$1";;
         -)     shift; break;;
         -*)
 		usage;
@@ -91,9 +93,9 @@ if [[ "$VERBOSE" = "yes" ]]; then
     set -x
 fi
 
-$EXECDIR/flye.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
+$EXECDIR/flye_28.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
-$EXECDIR/sorter.sh "$OUTDIR"
+$EXECDIR/sorter2.sh "$OUTDIR"
 
 $EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
 
@@ -114,9 +116,11 @@ $EXECDIR/split.sh "$OUTDIR"
 $EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
     "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
     
-# if ENG_SIG argument was provided, do some more work
-if [ ! -z ${ENG_SIG+x} ]; then
-    $EXECDIR/eng_sig_blast.sh "$OUTDIR" "$ENG_SIG"
+# if ENG_SIG & REF_GENOME argument was provided, do some more work
+if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
+    $EXECDIR/eng_sig_genome_3.sh "$OUTDIR" "$ENG_SIG"
+    
+    $EXECDIR/eng_sig_alitv.sh "$OUTDIR" "$REF_GENOME"
 
-    $EXECDIR/eng_sig_figure.sh "$OUTDIR"
+    $EXECDIR/eng_sig_cmap.sh "$OUTDIR"
 fi
