@@ -22,8 +22,8 @@ RUN apt-get -y update && \
       && \
     apt-get clean
 
-# Install Flye 2.6
-RUN pip3 install git+https://github.com/fenderglass/Flye@2.6
+# Install Flye 2.8
+RUN pip3 install git+https://github.com/fenderglass/Flye@2.8
 
 # Install Medaka (https://github.com/nanoporetech/medaka)
 
@@ -170,9 +170,31 @@ RUN apt-get -y update && \
 
 COPY --from=build /usr/local /usr/local
 
-# Install karyoploteR
-COPY docker/install-karyoploteR.R /tmp/install-karyoploteR.R
-RUN R -f /tmp/install-karyoploteR.R
+#install bedtools
+RUN apt-get -y install \
+    bedtools \
+    && \
+    apt-get clean
+
+# Install AliTV
+
+# AliTV needs libyaml-perl libhash-merge-perl bioperl perl cpanm lastz
+RUN apt-get -y install \
+    libyaml-perl \
+    libhash-merge-perl \
+    bioperl \
+    perl \
+    cpanminus \
+    lastz \
+    && \
+    apt-get clean
+
+# AliTV v1.0.6 install
+RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
+
+# Install chromoMap
+RUN R -e "install.packages('chromoMap', repos = 'http://cran.us.r-project.org')"
+RUN R -e "install.packages('htmltools', repos = 'http://cran.us.r-project.org')"
 
 # pilon
 ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
