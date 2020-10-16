@@ -170,6 +170,12 @@ RUN apt-get -y update && \
 
 COPY --from=build /usr/local /usr/local
 
+#install bedtools
+RUN apt-get -y install \
+    bedtools \
+    && \
+    apt-get clean
+
 # Install AliTV
 
 # AliTV needs libyaml-perl libhash-merge-perl bioperl perl cpanm lastz
