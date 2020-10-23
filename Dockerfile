@@ -187,8 +187,17 @@ RUN apt-get -y install \
     cpanminus \
     && \
     apt-get clean
-    
-docker pull quay.io/biocontainers/lastz:1.0.4--1
+
+# Download, compile and install lastz
+RUN wget https://github.com/lastz/lastz/archive/1.04.00.tar.gz && \
+tar -xf 1.04.00.tar.gz && \
+cd lastz-1.04.00 && \
+# remove -Werror from Makefile to fix compile errors
+sed -i 's/-Werror //' src/Makefile && \
+make && \
+install -m 0755 src/lastz /usr/local/bin/ && \
+install -m 0755 src/lastz_D /usr/local/bin/ && \
+cd .. && rm -rf lastz-*
 
 # AliTV v1.0.6 install
 RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
