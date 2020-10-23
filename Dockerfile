@@ -191,6 +191,7 @@ RUN apt-get -y install \
 # Download, compile and install lastz
 RUN apt-get -y install \
     wget \
+    git \
     && \
     apt-get clean
 
