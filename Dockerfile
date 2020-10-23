@@ -80,6 +80,7 @@ RUN pip3 install idna
 
 # Medaka only runs on python 3.5 and python 3.6 as of January,
 # 2020. This ties us to Ubuntu 18.04.
+RUN pip3 install pyspoa
 RUN pip3 install medaka
 
 # Install racon
