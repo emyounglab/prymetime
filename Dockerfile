@@ -191,7 +191,6 @@ RUN apt-get -y install \
 # Download, compile and install lastz
 RUN apt-get -y install \
     wget \
-    git \
     && \
     apt-get clean
 
@@ -205,7 +204,12 @@ install -m 0755 src/lastz /usr/local/bin/ && \
 install -m 0755 src/lastz_D /usr/local/bin/ && \
 cd .. && rm -rf lastz-*
 
+
 # AliTV v1.0.6 install
+RUN apt-get -y install \
+    git \
+    && \
+    apt-get clean
 RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
 
 # Install chromoMap
