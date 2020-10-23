@@ -207,7 +207,7 @@ cd .. && rm -rf lastz-*
 
 # AliTV v1.0.6 install
 RUN wget https://github.com/AliTVTeam/AliTV/archive/v1.0.6.tar.gz && \
-tar -xf AliTV-1.0.6.tar.gz
+tar -xf v1.0.6.tar.gz
 
 # Install chromoMap
 RUN R -e "install.packages('chromoMap', repos = 'http://cran.us.r-project.org')"
