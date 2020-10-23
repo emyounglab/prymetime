@@ -189,7 +189,7 @@ RUN apt-get -y install \
     apt-get clean
 
 # Download, compile and install lastz
-RUN wget https://github.com/lastz/lastz/archive/1.04.00.tar.gz && \
+RUN wget https://github.com/lastz/lastz/releases/tag/1.04.00.tar.gz && \
 tar -xf 1.04.00.tar.gz && \
 cd lastz-1.04.00 && \
 # remove -Werror from Makefile to fix compile errors
