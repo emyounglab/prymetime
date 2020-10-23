@@ -189,6 +189,11 @@ RUN apt-get -y install \
     apt-get clean
 
 # Download, compile and install lastz
+RUN apt-get -y install \
+    wget \
+    && \
+    apt-get clean
+
 RUN wget https://github.com/lastz/lastz/archive/1.04.00.tar.gz && \
 tar -xf 1.04.00.tar.gz && \
 cd lastz-1.04.00 && \
