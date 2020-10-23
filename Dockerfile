@@ -90,6 +90,9 @@ RUN git clone --recursive https://github.com/isovic/racon.git racon \
     && cmake -DCMAKE_BUILD_TYPE=Release .. \
     && make \
     && make install
+    
+# AliTV v1.0.6 install
+RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
 
 # Install Unicycler 0.4.8
 RUN pip3 install git+https://github.com/rrwick/Unicycler.git@v0.4.8
@@ -206,10 +209,6 @@ cd .. && rm -rf lastz-*
 
 
 # AliTV v1.0.6 install
-RUN apt-get -y install \
-    git \
-    && \
-    apt-get clean
 RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
 
 # Install chromoMap
