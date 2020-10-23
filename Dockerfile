@@ -185,9 +185,10 @@ RUN apt-get -y install \
     bioperl \
     perl \
     cpanminus \
-    lastz \
     && \
     apt-get clean
+    
+docker pull quay.io/biocontainers/lastz:1.0.4--1
 
 # AliTV v1.0.6 install
 RUN git clone --recursive https://github.com/AliTVTeam/AliTV.git@v1.0.6 alitv
