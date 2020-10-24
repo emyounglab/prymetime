@@ -8,4 +8,4 @@
 
 # source $HOME/medaka/bin/activate
 #medaka_consensus -i ~/nanopore_6/fastq/demulti/BC08.fastq -d ~/nanopore_6/FEY_48/scaffolds.fasta -o ~/nanopore_6/FEY_48/FEY_48_Flye_All_med
-medaka_consensus -i "$1" -d "$2" -o "$3" -m r941_min_high_g351
+medaka_consensus -i "$1" -d "$2" -o "$3"
