@@ -78,7 +78,7 @@ The run time of Prymetime will depend highly on the computer or server used, and
 
 ### Detailed Prymetime genome assembly pipeline
 
-![Prymetime_pipeline](https://github.com/emyounglab/prymetime/blob/master/docs/PRYMETIME_pipeline_description_2.png)
+![Prymetime_pipeline](https://github.com/emyounglab/prymetime/blob/master/docs/PRYMETIME_pipeline_description_2.svg)
 
 ### Supporting software
 Prymetime utilizes the following software packages:
