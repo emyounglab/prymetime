@@ -55,7 +55,7 @@ docker run -it --rm \
 
 The -eng_sig option will also produce a PDF displaying engineering signatures that were found in the genome assembly, shown below:
 
-![FEY_15 engineering signatures](https://github.com/emyounglab/prymetime/blob/master/docs/eng_sig_figure_FEY_15.jpg)
+![FEY_2 engineering signatures](https://github.com/emyounglab/prymetime/blob/master/docs/FEY_2_chromo_alitv.jpg)
 
 The eng_sig_felix.fasta file (provided in the PRYMETIME folder) contains all engineering signatures used in this study.
 
