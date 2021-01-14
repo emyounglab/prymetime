@@ -8,11 +8,6 @@
 #SBATCH -e unicycler_%j.err
 #SBATCH -J unicycler
 
-#fail if there's a typo in variable names
-set -u
-#fail if any command fails
-set -e
-
 PREFIX=$(basename "$4")
 cd "$4"
 cd unicycler
