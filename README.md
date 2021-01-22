@@ -95,6 +95,9 @@ Prymetime utilizes the following software packages:
 * [chromoMap](https://github.com/cran/chromoMap)
 * [AliTV](https://github.com/AliTVTeam/AliTV)
 
+### Prymetime genome assemblies
+* [prymetime_genomes](https://github.com/emyounglab/prymetime_genomes)
+
 ### Publication
 
 A preprint of our Prymetime publication is available on BioRxiv: https://www.biorxiv.org/content/10.1101/2020.05.05.079368v1
