@@ -14,11 +14,13 @@ RUN apt-get -y update && \
       liblzma-dev \
       libncurses5-dev \
       libssl-dev \
+      libtool \
       make \
       perl \
       python3-pip \
       wget \
       zlib1g-dev \
+      yasm \
       && \
     apt-get clean
 
@@ -78,6 +80,9 @@ RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-
 # Install idna
 RUN pip3 install idna
 
+# Install Cython
+RUN pip3 install --upgrade cython
+
 # Medaka only runs on python 3.5 and python 3.6 as of January,
 # 2020. This ties us to Ubuntu 18.04.
 RUN pip3 install medaka==0.12.0
@@ -134,11 +139,12 @@ RUN apt -y update && \
     apt -y --no-install-recommends install \
       gnupg \
       software-properties-common \
+      dirmngr \
     && \
-    apt-key adv --keyserver keyserver.ubuntu.com \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
       --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
     && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
 
 # sorter needs pandas and biopython
 RUN apt-get -y update && \
