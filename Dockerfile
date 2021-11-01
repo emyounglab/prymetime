@@ -14,11 +14,15 @@ RUN apt-get -y update && \
       liblzma-dev \
       libncurses5-dev \
       libssl-dev \
+          libtool \
+          libpython3.6-dev \
       make \
       perl \
       python3-pip \
+          python-dev \
       wget \
       zlib1g-dev \
+          yasm \
       && \
     apt-get clean
 
@@ -66,7 +70,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9
     && ./configure \
     && make \
     && make install
-    
+
 # Install bcftools
 RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2 \
     && bunzip2 -c bcftools-1.10.2.tar.bz2 | tar xf - \
@@ -77,6 +81,9 @@ RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-
 
 # Install idna
 RUN pip3 install idna
+
+# Install Cython
+RUN pip3 install --upgrade cython
 
 # Medaka only runs on python 3.5 and python 3.6 as of January,
 # 2020. This ties us to Ubuntu 18.04.
@@ -134,11 +141,12 @@ RUN apt -y update && \
     apt -y --no-install-recommends install \
       gnupg \
       software-properties-common \
+          dirmngr \
     && \
-    apt-key adv --keyserver keyserver.ubuntu.com \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
       --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
     && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
 
 # sorter needs pandas and biopython
 RUN apt-get -y update && \
@@ -214,8 +222,8 @@ RUN R -e "install.packages('chromoMap', repos = 'http://cran.us.r-project.org')"
 RUN R -e "install.packages('htmltools', repos = 'http://cran.us.r-project.org')"
 
 # pilon
-ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar /usr/local/bin
-ADD pilon /usr/local/bin
+ADD https://github.com/broadinstitute/pilon/releases/download/v1.23/pilon-1.23.jar .
+ADD pilon .
 
 # Add the entrypoint script
 COPY PRYMETIME /usr/local/bin/prymetime
