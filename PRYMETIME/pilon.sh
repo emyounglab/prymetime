@@ -3,8 +3,8 @@
 #SBATCH -n 16
 #SBATCH --mem=160G
 #SBATCH -o pilon_%j.out
-#SBATCH -e pylon_%j.err
-#SBATCH -J pylon
+#SBATCH -e pilon_%j.err
+#SBATCH -J pilon
 
 
 # map illumina reads for pilon
@@ -15,4 +15,4 @@ samtools index "$3"
 
 # pilon polish
 #pilon -Xmx160G --genome ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac.fasta --bam ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac_pil.bam --output ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac_pil
-pilon -Xmx160G --genome "$1" --bam "$3" --output "$4"
+java -Xmx16G -jar pilon-1.23.jar --genome "$1" --bam "$3" --output "$4"
