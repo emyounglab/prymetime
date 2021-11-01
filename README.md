@@ -100,4 +100,4 @@ Prymetime utilizes the following software packages:
 
 ### Publication
 
-A preprint of our Prymetime publication is available on BioRxiv: https://www.biorxiv.org/content/10.1101/2020.05.05.079368v1
+Prymetime publication is available: https://www.nature.com/articles/s41467-021-21656-9#Sec2
