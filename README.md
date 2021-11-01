@@ -100,4 +100,4 @@ Prymetime utilizes the following software packages:
 
 ### Publication
 
-Prymetime publication is available: https://www.nature.com/articles/s41467-021-21656-9#Sec2
+Prymetime publication is available: https://www.nature.com/articles/s41467-021-21656-9
