@@ -15,4 +15,4 @@ samtools index "$3"
 
 # pilon polish
 #pilon -Xmx160G --genome ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac.fasta --bam ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac_pil.bam --output ~/nanopore_6/FEY_48/FEY_48_Flye_All_med_rac_pil
-java -Xmx16G -jar pilon-1.23.jar --genome "$1" --bam "$3" --output "$4"
+pilon -Xmx160G --genome "$1" --bam "$3" --output "$4"
