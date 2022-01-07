@@ -97,30 +97,56 @@ $EXECDIR/flye_28.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
 $EXECDIR/sorter2.sh "$OUTDIR"
 
-$EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
+#skip medaka, racon, and pilon if no linear contigs
+if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 
-$EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq"
+	$EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
 
-$EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam"
+	$EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq"
 
-$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
-    "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta"
+	$EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam"
 
-$EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
-    "$OUTDIR/pilon.bam" "$OUTDIR/pilon" "$OUTDIR"
+	$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
+		"$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta"
 
-$EXECDIR/nucmer.sh "$OUTDIR"
+	$EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
+		"$OUTDIR/pilon.bam" "$OUTDIR/pilon" "$OUTDIR"
 
-$EXECDIR/split.sh "$OUTDIR"
+	$EXECDIR/nucmer.sh "$OUTDIR"
 
-$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
-    "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
-    
-# if ENG_SIG & REF_GENOME argument was provided, do some more work
-if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
-    $EXECDIR/eng_sig_genome_3.sh "$OUTDIR" "$ENG_SIG"
-    
-    $EXECDIR/eng_sig_alitv.sh "$OUTDIR" "$REF_GENOME"
+	$EXECDIR/split.sh "$OUTDIR"
 
-    $EXECDIR/eng_sig_cmap.sh "$OUTDIR"
+	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
+		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
+
+	# if ENG_SIG & REF_GENOME argument was provided, do some more work
+	if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
+
+		$EXECDIR/eng_sig_genome_3.sh "$OUTDIR" "$ENG_SIG"
+
+		$EXECDIR/eng_sig_alitv.sh "$OUTDIR" "$REF_GENOME"
+
+		$EXECDIR/eng_sig_cmap.sh "$OUTDIR"
+	fi
+
+else
+	echo "WARNING: no linear contigs found; continuing with only circular contigs" >&2
+
+	$EXECDIR/nucmer.sh "$OUTDIR"
+
+	$EXECDIR/split.sh "$OUTDIR"
+
+	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
+		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
+
+	# if ENG_SIG & REF_GENOME argument was provided, do some more work
+	if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
+
+		$EXECDIR/eng_sig_genome_3.sh "$OUTDIR" "$ENG_SIG"
+
+		$EXECDIR/eng_sig_alitv.sh "$OUTDIR" "$REF_GENOME"
+
+		$EXECDIR/eng_sig_cmap.sh "$OUTDIR"
+	fi
+
 fi
