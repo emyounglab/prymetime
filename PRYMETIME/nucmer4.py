@@ -30,16 +30,16 @@ if path.is_file():
             contigs.append(x)
             #print("long", x.id)
 
-            for pathname in glob.glob("*.fasta"):
-                basename = os.path.basename(pathname)
+    for pathname in glob.glob("*.fasta"):
+        basename = os.path.basename(pathname)
 
-                for x in short_contigs:
+        for x in short_contigs:
 
-                    if x.id in basename :
-                        runner = nucmer.Runner(basename, basename, "%(x)s_out.coords" % {'x':x.id},
-                        maxmatch=True, simplify=False, mincluster=2000, min_id=99, min_length=2000, coords_header=True)
+            if x.id in basename :
+                runner = nucmer.Runner(basename, basename, "%(x)s_out.coords" % {'x':x.id},
+                maxmatch=True, simplify=False, mincluster=2000, min_id=99, min_length=2000, coords_header=True)
 
-                        runner.run()
+                runner.run()
 
 # The below lines are for saving fasta files of the contigs if desired
 #SeqIO.write(short_contigs , "short_contigs.fasta", "fasta")
