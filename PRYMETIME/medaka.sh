@@ -8,4 +8,4 @@
 
 # source $HOME/medaka/bin/activate
 #medaka_consensus -i ~/nanopore_6/fastq/demulti/BC08.fastq -d ~/nanopore_6/FEY_48/scaffolds.fasta -o ~/nanopore_6/FEY_48/FEY_48_Flye_All_med
-medaka_consensus -i "$1" -d "$2" -o "$3"
+medaka_consensus -t ${N_THREADS} -i "$1" -d "$2" -o "$3"

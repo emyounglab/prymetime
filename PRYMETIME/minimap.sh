@@ -8,5 +8,5 @@
 
 
 #minimap2 -ax sr ~/nanopore_6/FEY_48/FEY_48_Flye_All_med/consensus.fasta ~/illumina_2/FEY48_ill_com.fastq > ~/nanopore_6/FEY_48/FEY_48_Flye_All_med.sam
-minimap2 -ax sr "$1"  "$2" > "$3"
+minimap2 -t ${N_THREADS} -ax sr "$1"  "$2" > "$3"
 

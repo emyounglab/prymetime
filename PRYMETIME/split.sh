@@ -15,5 +15,5 @@ cd "$1"
 mkdir -p unicycler
 cp cir_rep_contigs.fasta unicycler/
 cd unicycler
-awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta 
+awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta
 rm cir_rep_contigs.fasta
