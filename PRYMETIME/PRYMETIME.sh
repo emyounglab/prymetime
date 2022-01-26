@@ -27,6 +27,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -help)		usage; exit 0;;
         -verbose)	VERBOSE=yes;;
+	-threads)	shift; N_THREADS="$1";;
 	-nanopore)	shift;IN_FASTQ_NANOPORE="$1";;
 	-illumina_1)	shift;IN_FASTQ_ILLUMINA_1="$1";;
 	-illumina_2)	shift;IN_FASTQ_ILLUMINA_2="$1";;
@@ -80,6 +81,12 @@ if [[ -z "$GENOME_SIZE" ]]; then
 	echo "WARNING: -genome-size not specified; using $GENOME_SIZE" >&2
 fi
 
+if [[ -z "$N_THREADS" ]]; then
+    N_THREADS=8
+    echo "WARNING: -threads not specified; using $N_THREADS" >&2
+fi
+export N_THREADS
+
 #fail if there's a typo in variable names
 set -u
 #fail if any command fails
@@ -94,6 +101,8 @@ if [[ "$VERBOSE" = "yes" ]]; then
 fi
 
 $EXECDIR/flye_28.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
+
+$EXECDIR/filter_contigs.sh "$OUTDIR/assembly.fasta" "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
 
 $EXECDIR/sorter2.sh "$OUTDIR"
 

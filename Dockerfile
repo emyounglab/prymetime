@@ -14,15 +14,16 @@ RUN apt-get -y update && \
       liblzma-dev \
       libncurses5-dev \
       libssl-dev \
-	  libtool \
-	  libpython3.6-dev \
+      libtool \
+      libpython3.6-dev \
       make \
       perl \
       python3-pip \
-	  python-dev \
+      python-dev \
       wget \
+      zip \
       zlib1g-dev \
-	  yasm \
+      yasm \
       && \
     apt-get clean
 
@@ -38,6 +39,12 @@ RUN pip3 install git+https://github.com/fenderglass/Flye@2.9
 RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.17/minimap2-2.17_x64-linux.tar.bz2 \
     | tar -jxvf - -C /usr/local \
     && ln -s /usr/local/minimap2-2.17_x64-linux/minimap2 /usr/local/bin
+
+# Install bowtie2 (http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
+RUN curl -L -o bowtie2-2.4.5-linux-x86_64.zip https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.4.5/bowtie2-2.4.5-linux-x86_64.zip/download \
+    && unzip bowtie2-2.4.5-linux-x86_64.zip -d /usr/local \
+    && ln -s /usr/local/bowtie2-2.4.5-linux-x86_64/bowtie2 /usr/local/bin \
+    && ln -s /usr/local/bowtie2-2.4.5-linux-x86_64/bowtie2-build /usr/local/bin
 
 # Install packages needed to build HTSlib and samtools
 RUN apt-get -y install \
@@ -70,7 +77,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9
     && ./configure \
     && make \
     && make install
-    
+
 # Install bcftools
 RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2 \
     && bunzip2 -c bcftools-1.10.2.tar.bz2 | tar xf - \
@@ -141,7 +148,7 @@ RUN apt -y update && \
     apt -y --no-install-recommends install \
       gnupg \
       software-properties-common \
-	  dirmngr \
+      dirmngr \
     && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
       --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
