@@ -19,15 +19,13 @@ cd unicycler
 
 for f in *.fasta
 do
-minimap2 -ax map-ont "$f" "$1" | samtools fastq -n -F 4 - > "$f"_nano_map.fastq
+minimap2 -t ${N_THREADS} -ax map-ont "$f" "$1" | samtools fastq --threads ${N_THREADS} -n -F 4 - > "$f"_nano_map.fastq
 
-minimap2 -ax sr "$f" "$2" | samtools fastq -n -F 4 - > "$f"_ill_map_1.fastq
+bowtie2-build --threads ${N_THREADS} "$f" refgenome
+bowtie2 -x refgenome --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
+rm -f refgenome*.bt2
 
-minimap2 -ax sr "$f" "$3" | samtools fastq -n -F 4 - > "$f"_ill_map_2.fastq
-
-fastq_pair "$f"_ill_map_1.fastq "$f"_ill_map_2.fastq
-
-unicycler -1 "$f"_ill_map_1.fastq.paired.fq -2 "$f"_ill_map_2.fastq.paired.fq -l "$f"_nano_map.fastq -o "$f"_unicycler
+unicycler --threads ${N_THREADS} -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -l "$f"_nano_map.fastq -o "$f"_unicycler
 done
 
 cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
@@ -36,4 +34,5 @@ cd ../
 
 cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
 
+# seqkit has threads on by default
 seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
