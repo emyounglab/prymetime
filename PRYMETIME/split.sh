@@ -12,7 +12,7 @@ set -e
 
 
 cd "$1"
-mkdir unicycler
+mkdir -p unicycler
 cp cir_rep_contigs.fasta unicycler/
 cd unicycler
 awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta 
