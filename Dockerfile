@@ -143,9 +143,9 @@ RUN curl -s -L \
 FROM ubuntu:bionic
 
 # Add R package repository
-RUN apt -y update && \
+RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
-    apt -y --no-install-recommends install \
+    apt-get -y --no-install-recommends install \
       gnupg \
       software-properties-common \
       dirmngr \
