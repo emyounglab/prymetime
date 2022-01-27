@@ -25,14 +25,18 @@ def main():
             with open('assembly.fasta') as f:
                 accept_batch = []
                 reject_batch = []
+
                 for record in SeqIO.parse(f, 'fasta'):
                     contig_name = record.id
-                    reads = contig_reads.get(contig_name, None)
-                    if reads is None:
-                        print(f'Contig {contig_name} is in assembly.fasta but there is no read count entry for it', file=sys.stderr)
-                        sys.exit(1)
+                    reads = contig_reads.get(contig_name, 0)
 
-                    average_reads = reads / len(record.seq)
+                    if reads == 0:
+                        # no reads were mapped for this contig,
+                        # no need to count seq length
+                        average_reads = 0
+                    else:
+                        average_reads = reads / len(record.seq)
+
                     if average_reads >= THRESHOLD:
                         print(f'Accepted {contig_name} because it has an average of {average_reads} reads')
                         accept_batch.append(record)
