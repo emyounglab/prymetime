@@ -73,4 +73,4 @@ for x in short_contigs:
 for x in cir_rep_contigs :
     SeqIO.write(cir_rep_contigs, "cir_rep_contigs.fasta", "fasta")
 
-    SeqIO.write(contigs, "polished_contigs.fasta", "fasta")
+SeqIO.write(contigs, "polished_contigs.fasta", "fasta")
