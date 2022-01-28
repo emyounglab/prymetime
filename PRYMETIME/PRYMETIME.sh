@@ -114,7 +114,7 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 
 	$EXECDIR/nucmer.sh "$OUTDIR"
 
-	$EXECDIR/split.sh "$OUTDIR"
+	$EXECDIR/split.sh "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
 		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
