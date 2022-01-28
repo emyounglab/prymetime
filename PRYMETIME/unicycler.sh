@@ -15,22 +15,36 @@ set -e
 
 PREFIX=$(basename "$4")
 cd "$4"
-cd unicycler
 
-for f in *.fasta
-do
-minimap2 -ax map-ont "$f" "$1" | samtools fastq -n -F 4 - > "$f"_nano_map.fastq
+# if there are no cir_rep_contigs, treat only linear
+if [[ -s "$OUTDIR/cir_rep_contigs.fasta" ]]; then
 
-minimap2 -ax sr "$f" "$2" | samtools fastq -n -F 4 - > "$f"_ill_map_1.fastq
+  seqkit rename polished_contigs.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r$
+else
 
-minimap2 -ax sr "$f" "$3" | samtools fastq -n -F 4 - > "$f"_ill_map_2.fastq
+  cd unicycler
 
-fastq_pair "$f"_ill_map_1.fastq "$f"_ill_map_2.fastq
+  for f in *.fasta
+  do
+  minimap2 -ax map-ont "$f" "$1" | samtools fastq -n -F 4 - > "$f"_nano_map.fastq
 
-unicycler -1 "$f"_ill_map_1.fastq.paired.fq -2 "$f"_ill_map_2.fastq.paired.fq -l "$f"_nano_map.fastq -o "$f"_unicycler
-done
+  minimap2 -ax sr "$f" "$2" | samtools fastq -n -F 4 - > "$f"_ill_map_1.fastq
 
-cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
+  minimap2 -ax sr "$f" "$3" | samtools fastq -n -F 4 - > "$f"_ill_map_2.fastq
+
+  fastq_pair "$f"_ill_map_1.fastq "$f"_ill_map_2.fastq
+
+  unicycler -1 "$f"_ill_map_1.fastq.paired.fq -2 "$f"_ill_map_2.fastq.paired.fq -l "$f"_nano_map.fastq -o "$f"_unicycler
+  done
+
+  cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
+
+  cd ../
+
+  cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
+
+  seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r '$
+fi
 
 cd ../
 
