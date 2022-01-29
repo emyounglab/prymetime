@@ -15,24 +15,30 @@ set -e
 
 PREFIX=$(basename "$4")
 cd "$4"
-cd unicycler
 
-for f in *.fasta
-do
-minimap2 -t ${N_THREADS} -ax map-ont "$f" "$1" | samtools fastq --threads ${N_THREADS} -n -F 4 - > "$f"_nano_map.fastq
+if [[ -s "$OUTDIR/cir_rep_contigs.fasta" ]]; then
 
-bowtie2-build --threads ${N_THREADS} "$f" refgenome
-bowtie2 -x refgenome --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
-rm -f refgenome*.bt2
+  cd unicycler
 
-unicycler --threads ${N_THREADS} -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -l "$f"_nano_map.fastq -o "$f"_unicycler
-done
+  for f in *.fasta; do
+    minimap2 -t ${N_THREADS} -ax map-ont "$f" "$1" | samtools fastq --threads ${N_THREADS} -n -F 4 - > "$f"_nano_map.fastq
 
-cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
+    bowtie2-build --threads ${N_THREADS} "$f" refgenome
+    bowtie2 -x refgenome --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
+    rm -f refgenome*.bt2
 
-cd ../
+    unicycler --threads ${N_THREADS} -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -l "$f"_nano_map.fastq -o "$f"_unicycler
+  done
 
-cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
+  cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
-# seqkit has threads on by default
-seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+  cd ../
+
+  cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
+
+  # seqkit has threads on by default
+  seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+else
+  # if there are no cir_rep_contigs, treat only linear
+  seqkit rename polished_contigs.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+fi

@@ -10,10 +10,21 @@ set -u
 #fail if any command fails
 set -e
 
+# arg1: output directory
+# arg2: circular contigs file
 
-cd "$1"
-mkdir -p unicycler
-cp cir_rep_contigs.fasta unicycler/
-cd unicycler
-awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta
-rm cir_rep_contigs.fasta
+if [[ -s "$2" ]]; then
+
+  # if there are cir_rep_contigs
+  cd "$1"
+  mkdir -p unicycler
+  cp "$2" unicycler/
+  cd unicycler
+  awk '/^>/{s=++d".fasta"} {print > s}' "$2"
+  rm "$2"
+
+else
+
+  echo "WARNING: no circular contigs found; continuing with only linear contigs" >&2
+
+fi
