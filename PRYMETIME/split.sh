@@ -13,11 +13,6 @@ set -e
 # if there are cir_rep_contigs
 if [[ -s "$2" ]]; then
 
-  echo "WARNING: no circular contigs found; continuing with only linear contigs" >&2
-
-
-else
-
   cd "$1"
   mkdir unicycler
   cp cir_rep_contigs.fasta unicycler/
@@ -25,5 +20,8 @@ else
   awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta
   rm cir_rep_contigs.fasta
 
-fi
+else
 
+  echo "WARNING: no circular contigs found; continuing with only linear contigs" >&2
+
+fi
