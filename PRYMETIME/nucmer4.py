@@ -61,16 +61,21 @@ for pathname in glob.glob("*.coords"):
         print(name[0], "morethan 1")
 '''
 
-cir_rep_contigs = [x for x in SeqIO.parse(open("cir_contigs.fasta"), 'fasta')]
+cir_path = "cir_contigs.fasta"
+path_cir = Path(cir_path)
 
-for x in short_contigs:
-        if len(pd.read_csv("%(x)s_out.coords" % {'x': x.id}).index) > 4 :
-            cir_rep_contigs.append(x)
-        else:
-            #print(x.id)
-            contigs.append(x)
+if path_cir.is_file():
 
-for x in cir_rep_contigs :
-    SeqIO.write(cir_rep_contigs, "cir_rep_contigs.fasta", "fasta")
+    cir_rep_contigs = [x for x in SeqIO.parse(open("cir_contigs.fasta"), 'fasta')]
+
+    for x in short_contigs:
+            if len(pd.read_csv("%(x)s_out.coords" % {'x': x.id}).index) > 4 :
+                cir_rep_contigs.append(x)
+            else:
+                #print(x.id)
+                contigs.append(x)
+
+    for x in cir_rep_contigs :
+        SeqIO.write(cir_rep_contigs, "cir_rep_contigs.fasta", "fasta")
 
 SeqIO.write(contigs, "polished_contigs.fasta", "fasta")
