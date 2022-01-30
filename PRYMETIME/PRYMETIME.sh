@@ -117,7 +117,7 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 	$EXECDIR/split.sh "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
-		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
+		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	# if ENG_SIG & REF_GENOME argument was provided, do some more work
 	if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
