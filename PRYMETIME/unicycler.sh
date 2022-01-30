@@ -17,10 +17,7 @@ PREFIX=$(basename "$4")
 cd "$4"
 
 # if there are no cir_rep_contigs, treat only linear
-if [[ -s "$OUTDIR/cir_rep_contigs.fasta" ]]; then
-
-  seqkit rename polished_contigs.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r$
-else
+if [[ -s "$5" ]]; then
 
   cd unicycler
 
@@ -43,11 +40,10 @@ else
 
   cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
 
-  seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r '$
+  seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+  
+else
+  
+  seqkit rename polished_contigs.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+  
 fi
-
-cd ../
-
-cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
-
-seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
