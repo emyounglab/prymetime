@@ -18,10 +18,7 @@ if [[ -s "$2" ]]; then
   # if there are cir_rep_contigs
   cd "$1"
   mkdir -p unicycler
-  cp "$2" unicycler/
-  cd unicycler
-  awk '/^>/{s=++d".fasta"} {print > s}' "$2"
-  rm "$2"
+  awk '/^>/{s="unicycler/"++d".fasta"} {print > s}' "$2"
 
 else
 
