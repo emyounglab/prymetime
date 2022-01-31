@@ -106,7 +106,6 @@ $EXECDIR/filter_contigs.sh "$OUTDIR/assembly.fasta" "$IN_FASTQ_ILLUMINA_1" "$IN_
 
 $EXECDIR/sorter2.sh "$OUTDIR"
 
-#skip medaka, racon, and pilon if no linear contigs
 if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 
 	$EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
@@ -139,11 +138,12 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 	fi
 
 else
+	#skip medaka, racon, and pilon if no linear contigs
 	echo "WARNING: no linear contigs found; continuing with only circular contigs" >&2
 
 	$EXECDIR/nucmer.sh "$OUTDIR"
 
-	$EXECDIR/split.sh "$OUTDIR"
+	$EXECDIR/split.sh "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
 		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"

@@ -16,7 +16,7 @@ set -e
 PREFIX=$(basename "$4")
 cd "$4"
 
-if [[ -s "$OUTDIR/cir_rep_contigs.fasta" ]]; then
+if [[ -s "./cir_rep_contigs.fasta" ]]; then
 
   cd unicycler
 
