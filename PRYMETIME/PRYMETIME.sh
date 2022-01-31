@@ -125,9 +125,9 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 
 	$EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq"
 
-	$EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam"
+	$EXECDIR/bowtie2.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/bowtie2.sam" "$OUTDIR"
 
-	$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
+	$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/bowtie2.sam" \
 		"$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta"
 
 	$EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
