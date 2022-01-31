@@ -23,9 +23,9 @@ if [[ -s "./cir_rep_contigs.fasta" ]]; then
   for f in *.fasta; do
     minimap2 -t ${N_THREADS} -ax map-ont "$f" "$1" | samtools fastq --threads ${N_THREADS} -n -F 4 - > "$f"_nano_map.fastq
 
-    bowtie2-build --threads ${N_THREADS} "$f" refgenome
-    bowtie2 -x refgenome --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
-    rm -f refgenome*.bt2
+    bowtie2-build --threads ${N_THREADS} "$f" "${f}-idx"
+    bowtie2 -x "${f}-idx" --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
+    rm -f "${f}-idx"*.bt2
 
     unicycler --threads ${N_THREADS} -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -l "$f"_nano_map.fastq -o "$f"_unicycler
   done
