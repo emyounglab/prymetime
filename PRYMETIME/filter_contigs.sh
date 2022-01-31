@@ -8,7 +8,7 @@ set -e
 MIN_COVERAGE_DEPTH=10
 
 log() {
-    echo "[$( basename ${BASH_SOURCE[0]} )]: $1"
+    echo "[$( date '+%Y-%m-%d %H:%M:%S' ) $( basename ${BASH_SOURCE[0]} )]: $1"
 }
 
 EXECDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
