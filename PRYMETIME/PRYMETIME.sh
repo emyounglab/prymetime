@@ -104,6 +104,19 @@ $EXECDIR/flye_28.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
 $EXECDIR/filter_contigs.sh "$OUTDIR/assembly.fasta" "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
 
+# check if anything made it past the filter
+if [[ ! -s "$OUTDIR/accept.fasta" ]]; then
+
+    echo "WARNING: no contigs passed the filter. Running medaka on flye output" >&2
+
+    $EXEDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/assembly.fasta" "$OUTDIR/medaka"
+
+    mv "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/$(basename $OUTDIR)_final.fasta"
+
+    exit 0
+fi
+# else, at least one contig made it through the filter
+
 $EXECDIR/sorter2.sh "$OUTDIR"
 
 if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
