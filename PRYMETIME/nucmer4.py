@@ -75,7 +75,6 @@ if path_cir.is_file():
                 #print(x.id)
                 contigs.append(x)
 
-    for x in cir_rep_contigs :
-        SeqIO.write(cir_rep_contigs, "cir_rep_contigs.fasta", "fasta")
+    SeqIO.write(cir_rep_contigs, "cir_rep_contigs.fasta", "fasta")
 
 SeqIO.write(contigs, "polished_contigs.fasta", "fasta")
