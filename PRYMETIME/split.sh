@@ -10,15 +10,15 @@ set -u
 #fail if any command fails
 set -e
 
-# if there are cir_rep_contigs
+# arg1: output directory
+# arg2: circular contigs file
+
 if [[ -s "$2" ]]; then
 
+  # if there are cir_rep_contigs
   cd "$1"
-  mkdir unicycler
-  cp cir_rep_contigs.fasta unicycler/
-  cd unicycler
-  awk '/^>/{s=++d".fasta"} {print > s}' cir_rep_contigs.fasta
-  rm cir_rep_contigs.fasta
+  mkdir -p unicycler
+  awk '/^>/{s="unicycler/"++d".fasta"} {print > s}' "$2"
 
 else
 

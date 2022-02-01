@@ -27,6 +27,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -help)		usage; exit 0;;
         -verbose)	VERBOSE=yes;;
+	-threads)	shift; N_THREADS="$1";;
 	-nanopore)	shift;IN_FASTQ_NANOPORE="$1";;
 	-illumina_1)	shift;IN_FASTQ_ILLUMINA_1="$1";;
 	-illumina_2)	shift;IN_FASTQ_ILLUMINA_2="$1";;
@@ -80,6 +81,12 @@ if [[ -z "$GENOME_SIZE" ]]; then
 	echo "WARNING: -genome-size not specified; using $GENOME_SIZE" >&2
 fi
 
+if [[ -z "$N_THREADS" ]]; then
+    N_THREADS=8
+    echo "WARNING: -threads not specified; using $N_THREADS" >&2
+fi
+export N_THREADS
+
 #fail if there's a typo in variable names
 set -u
 #fail if any command fails
@@ -95,18 +102,32 @@ fi
 
 $EXECDIR/flye_28.sh "$IN_FASTQ_NANOPORE" $GENOME_SIZE "$OUTDIR"
 
+$EXECDIR/filter_contigs.sh "$OUTDIR/assembly.fasta" "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
+
+# check if anything made it past the filter
+if [[ ! -s "$OUTDIR/accept.fasta" ]]; then
+
+    echo "WARNING: no contigs passed the filter. Running medaka on flye output" >&2
+
+    $EXEDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/assembly.fasta" "$OUTDIR/medaka"
+
+    mv "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/$(basename $OUTDIR)_final.fasta"
+
+    exit 0
+fi
+# else, at least one contig made it through the filter
+
 $EXECDIR/sorter2.sh "$OUTDIR"
 
-#skip medaka, racon, and pilon if no linear contigs
 if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 
 	$EXECDIR/medaka.sh "$IN_FASTQ_NANOPORE" "$OUTDIR/lin_contigs.fasta" "$OUTDIR/medaka"
 
 	$EXECDIR/illumina_merge.sh "$IN_FASTQ_ILLUMINA_1" "$IN_FASTQ_ILLUMINA_2" "$OUTDIR/illumina_merge.fastq"
 
-	$EXECDIR/minimap.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam"
+	$EXECDIR/bowtie2.sh "$OUTDIR/medaka/consensus.fasta" "$OUTDIR/illumina_merge.fastq" "$OUTDIR/bowtie2.sam" "$OUTDIR"
 
-	$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/minimap.sam" \
+	$EXECDIR/racon.sh "$OUTDIR/illumina_merge.fastq" "$OUTDIR/bowtie2.sam" \
 		"$OUTDIR/medaka/consensus.fasta" "$OUTDIR/racon.fasta"
 
 	$EXECDIR/pilon.sh "$OUTDIR/racon.fasta" "$OUTDIR/illumina_merge.fastq" \
@@ -117,7 +138,7 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 	$EXECDIR/split.sh "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
-		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
+		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
 
 	# if ENG_SIG & REF_GENOME argument was provided, do some more work
 	if [ ! -z ${ENG_SIG+x} ${REF_GENOME+x} ]; then
@@ -130,11 +151,12 @@ if [[ -s "$OUTDIR/lin_contigs.fasta" ]]; then
 	fi
 
 else
+	#skip medaka, racon, and pilon if no linear contigs
 	echo "WARNING: no linear contigs found; continuing with only circular contigs" >&2
 
 	$EXECDIR/nucmer.sh "$OUTDIR"
 
-	$EXECDIR/split.sh "$OUTDIR"
+	$EXECDIR/split.sh "$OUTDIR" "$OUTDIR/cir_rep_contigs.fasta"
 
 	$EXECDIR/unicycler.sh "$IN_FASTQ_NANOPORE" "$IN_FASTQ_ILLUMINA_1" \
 		"$IN_FASTQ_ILLUMINA_2" "$OUTDIR"
