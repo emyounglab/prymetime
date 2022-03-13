@@ -150,10 +150,10 @@ RUN apt-get -y update && \
       software-properties-common \
       dirmngr \
     && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+    apt-key adv --keyserver keyserver.ubuntu.com \
       --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
     && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
 
 # sorter needs pandas and biopython
 RUN apt-get -y update && \
