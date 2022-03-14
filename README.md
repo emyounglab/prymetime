@@ -32,7 +32,7 @@ docker run -it --rm \
     -v /path/to/output_dir:/output \
     prymetime \
     -nanopore /input/my_nanopore.fastq \
-    -illumina_1 /input/my_illumina_1.fastq> \
+    -illumina_1 /input/my_illumina_1.fastq \
     -illumina_2 /input/my_illumina_2.fastq
     -genome-size my_genome_size
     -outdir /output/my_directory
