@@ -92,6 +92,12 @@ RUN pip3 install idna
 # Install Cython
 RUN pip3 install --upgrade cython
 
+# Setuptools-scm requires separate pre-install due to Python version compatibility
+RUN pip3 install setuptools-scm==6.4.2
+
+# Later versions of protobuf drop Python 3.6
+RUN pip3 install protobuf==3.19.4
+
 # Medaka only runs on python 3.5 and python 3.6 as of January,
 # 2020. This ties us to Ubuntu 18.04.
 RUN pip3 install medaka==0.12.0
