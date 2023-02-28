@@ -37,7 +37,7 @@ if [[ -s "./cir_rep_contigs.fasta" ]]; then
   cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
 
   # seqkit has threads on by default
-  seqkit rename "$PREFIX"_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+  seqkit rename prymeds12_comb.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | awk '/^>/ { if (/circular=true/==1) { print (">scaffold_"++i"_circ") } else { print (">scaffold_"++i) } }' > test_final.fasta
 else
   # if there are no cir_rep_contigs, treat only linear
   seqkit rename polished_contigs.fasta | seqkit seq -m 1000 | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
