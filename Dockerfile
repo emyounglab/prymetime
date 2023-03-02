@@ -124,8 +124,8 @@ RUN curl -s -L https://github.com/linsalrob/fastq-pair/archive/v1.0.tar.gz | tar
     && make install
 
 # Install SPAdes for unicycler
-RUN curl -s http://cab.spbu.ru/files/release3.14.0/SPAdes-3.14.0-Linux.tar.gz | tar xzf - \
-    && cd SPAdes-3.14.0-Linux \
+RUN curl -s http://cab.spbu.ru/files/release3.15.4/SPAdes-3.15.4-Linux.tar.gz | tar xzf - \
+    && cd SPAdes-3.15.4-Linux.tar.gz \
     && cp bin/* /usr/local/bin/ \
     && cp -r share/* /usr/local/share/
 
