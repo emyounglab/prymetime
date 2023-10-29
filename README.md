@@ -1,10 +1,40 @@
 # Prymetime
 
-Prymetime is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast strains. Prymetime relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs.
+Prymetime is a de novo genome assembly pipeline that uses long reads from Oxford Nanopore Technologies and PacBio and short reads from Illumina. It was designed to produce high-quality genome assemblies from engineered yeast and bacteria strains. Prymetime relies on the long read de novo assembler Flye for linear contigs and the hybrid assembler Unicycler for circular contigs. Prymetime now allows for long-read or short-read only.
 
 All software requirements for Prymetime have been packaged together into a Docker image. Docker is available freely here: https://hub.docker.com/search?offering=community&type=edition
 
 Although it is possible to run the Prymetime Docker image on a desktop computer, we strongly recommend running the pipeline on a server. The memory requirements of Flye and Unicycler at the recommended 40X genome coverage for nanopore and Illumina reads are likely not possible on a "normal" desktop computer.
+
+Additionally, this Docker image can be wrapped in a Singularity image to run on HPCs for ease of use.
+
+## Build Singularity image
+
+Download Prymetime repo
+```shell
+git clone https://github.com/emyounglab/prymetime.git
+```
+
+Build Singularity image
+```shell
+singularity build prymetime docker://sjtrauber/prymetime:v2
+```
+Run Prymetime assembly pipeline
+```shell
+singularity run \
+        -B ~/path/to/input:/input \
+        -B ~/path/to/output:/output \
+        ~/prymetime \
+        -long ~/path/to/nanopore.fastq \
+        -illumina_1 ~/path/to/illumina_1.fastq \
+        -illumina_2 ~/path/to/illumina_2.fastq \
+        -outdir ~/path/to/output \
+	    -preferred_assembly short \ # indicates bacterial assembly, remove for yeast
+    	-read_type <type> \ # include if using only <long> or <short> reads or <assembly> for inputting pre-assembled genome for eng_sig identification
+        -eng_sig ~/path/to/bacterial_signatures.fna \ # optional
+        -ref_genome ~/path/to/output/GCF_001456255.1.fna # optional
+```
+The final genome assembly will be the my_directory_final.fasta file.
 
 ## Build Docker image
 
@@ -14,9 +44,8 @@ git clone https://github.com/emyounglab/prymetime.git
 ```
 Build Docker image
 ```shell
-docker build --tag prymetime prymetime
+docker build --tag prymetimev2 prymetime
 ```
-
 Install time is around one hour on a desktop computer.
 
 ## Run Docker image with data
@@ -30,11 +59,11 @@ Run Prymetime assembly pipeline
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetime \
+    prymetimev2 \
     -nanopore /input/my_nanopore.fastq \
     -illumina_1 /input/my_illumina_1.fastq \
-    -illumina_2 /input/my_illumina_2.fastq
-    -genome-size my_genome_size
+    -illumina_2 /input/my_illumina_2.fastq \
+    -genome-size my_genome_size \
     -outdir /output/my_directory
 ```
 The final genome assembly will be the my_directory_final.fasta file.
@@ -44,12 +73,12 @@ Run Prymetime with engineering signatures search
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetime \
+    prymetimev2 \
     -nanopore /input/my_nanopore.fastq \
     -illumina_1 /input/my_illumina_1.fastq \
-    -illumina_2 /input/my_illumina_2.fastq
-    -genome-size my_genome_size
-    -outdir /output/my_directory
+    -illumina_2 /input/my_illumina_2.fastq \
+    -genome-size my_genome_size \
+    -outdir /output/my_directory \
     -eng_sig /input/my_eng_sig.fasta
 ```
 
