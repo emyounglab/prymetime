@@ -18,7 +18,8 @@ if [[ -s "$2" ]]; then
   # if there are cir_rep_contigs
   cd "$1"
   mkdir -p unicycler
-  awk '/^>/{s="unicycler/"++d".fasta"} {print > s}' "$2"
+  seqkit seq -m 5500 cir_rep_contigs.fasta > cir_rep_contigs_trimmed.fasta
+  awk '/^>/{s="unicycler/"++d".fasta"} {print > s}' cir_rep_contigs_trimmed.fasta
 
 else
 

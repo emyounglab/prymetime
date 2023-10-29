@@ -1,4 +1,18 @@
-FROM ubuntu:bionic as build
+FROM ubuntu:focal as build
+
+#ENV CUDO_VISIBLE_DEVICES=-1
+
+# Set locale settings
+ENV LANGUAGE=en_US.en
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN apt-get update && apt-get install -y locales && \
+        sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \
+        dpkg-reconfigure --frontend=noninteractive locales && \
+        update-locale LANG=$LANG
+
+# Generate locale settings
+RUN locale-gen en_US.UTF-8
 
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
@@ -15,20 +29,33 @@ RUN apt-get -y update && \
       libncurses5-dev \
       libssl-dev \
       libtool \
-      libpython3.6-dev \
       make \
-      perl \
-      python3-pip \
-      python-dev \
       wget \
+      apt-utils \
       zip \
       zlib1g-dev \
       yasm \
+      build-essential \
+      python3-dev \
+      python3-pip \
+      zlib1g-dev \
+      libncursesw5-dev \
+      gfortran \
+      libreadline8 \
+      libreadline-dev \
+      libx11-dev \
+      libxt6 \
+      xorg-dev \
+      libpcre2-posix2 \
+      libpcre2-dev \
       && \
     apt-get clean
 
+# downgrade numpy for deprecated np.bool
+RUN pip3 install numpy==1.23.1
+
 # Install Flye 2.9
-RUN pip3 install git+https://github.com/fenderglass/Flye@2.9
+RUN pip3 install git+https://github.com/fenderglass/Flye@2.9.2
 
 # Install Medaka (https://github.com/nanoporetech/medaka)
 
@@ -36,9 +63,9 @@ RUN pip3 install git+https://github.com/fenderglass/Flye@2.9
 # those dependencies.
 
 # Install minimap2 (https://github.com/lh3/minimap2)
-RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.17/minimap2-2.17_x64-linux.tar.bz2 \
+RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.24/minimap2-2.24_x64-linux.tar.bz2 \
     | tar -jxvf - -C /usr/local \
-    && ln -s /usr/local/minimap2-2.17_x64-linux/minimap2 /usr/local/bin
+    && ln -s /usr/local/minimap2-2.24_x64-linux/minimap2 /usr/local/bin
 
 # Install bowtie2 (http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 RUN curl -L -o bowtie2-2.4.5-linux-x86_64.zip https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.4.5/bowtie2-2.4.5-linux-x86_64.zip/download \
@@ -52,7 +79,6 @@ RUN apt-get -y install \
     automake \
     make \
     gcc \
-    perl \
     zlib1g-dev \
     libbz2-dev \
     liblzma-dev \
@@ -63,25 +89,25 @@ RUN apt-get -y install \
     apt-get clean
 
 # Install HTSlib for bgzip, tabix
-RUN wget https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2 \
-    && bunzip2 -c htslib-1.9.tar.bz2 | tar xf - \
-    && cd htslib-1.9 \
+RUN wget https://github.com/samtools/htslib/releases/download/1.17/htslib-1.17.tar.bz2 \
+    && bunzip2 -c htslib-1.17.tar.bz2 | tar xf - \
+    && cd htslib-1.17 \
     && ./configure \
     && make \
     && make install
 
-# Install samtools 1.9 (requires HTSlib?)
-RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
-    && bunzip2 -c samtools-1.9.tar.bz2 | tar xf - \
-    && cd samtools-1.9 \
+# Install samtools
+RUN wget https://github.com/samtools/samtools/releases/download/1.17/samtools-1.17.tar.bz2 \
+    && bunzip2 -c samtools-1.17.tar.bz2 | tar xf - \
+    && cd samtools-1.17 \
     && ./configure \
     && make \
     && make install
 
 # Install bcftools
-RUN wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2 \
-    && bunzip2 -c bcftools-1.10.2.tar.bz2 | tar xf - \
-    && cd bcftools-1.10.2 \
+RUN wget https://github.com/samtools/bcftools/releases/download/1.17/bcftools-1.17.tar.bz2 \
+    && bunzip2 -c bcftools-1.17.tar.bz2 | tar xf - \
+    && cd bcftools-1.17 \
     && ./configure \
     && make \
     && make install
@@ -92,15 +118,14 @@ RUN pip3 install idna
 # Install Cython
 RUN pip3 install --upgrade cython
 
-# Setuptools-scm requires separate pre-install due to Python version compatibility
+# Install Setuptools
 RUN pip3 install setuptools-scm==6.4.2
 
-# Later versions of protobuf drop Python 3.6
-RUN pip3 install protobuf==3.19.4
+# Install protobuf
+RUN pip3 install protobuf==4.22.1
 
-# Medaka only runs on python 3.5 and python 3.6 as of January,
-# 2020. This ties us to Ubuntu 18.04.
-RUN pip3 install medaka==0.12.0
+# Install Medaka
+RUN pip3 install medaka==1.7.3
 
 # Install racon
 RUN git clone --recursive https://github.com/isovic/racon.git racon \
@@ -112,7 +137,7 @@ RUN git clone --recursive https://github.com/isovic/racon.git racon \
     && make install
 
 # Install Unicycler 0.4.8
-RUN pip3 install git+https://github.com/rrwick/Unicycler.git@v0.4.8
+RUN pip3 install git+https://github.com/rrwick/Unicycler.git@v0.5.0
 
 # Install fastq_pair
 RUN curl -s -L https://github.com/linsalrob/fastq-pair/archive/v1.0.tar.gz | tar xzf - \
@@ -124,9 +149,9 @@ RUN curl -s -L https://github.com/linsalrob/fastq-pair/archive/v1.0.tar.gz | tar
     && make install
 
 # Install SPAdes for unicycler
-RUN wget http://cab.spbu.ru/files/release3.15.4/SPAdes-3.15.4-Linux.tar.gz \
-    && tar -xzf SPAdes-3.15.4-Linux.tar.gz \
-    && cd SPAdes-3.15.4-Linux \
+RUN wget http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5-Linux.tar.gz \
+    && tar -xzf SPAdes-3.15.5-Linux.tar.gz \
+    && cd SPAdes-3.15.5-Linux \
     && cp bin/* /usr/local/bin/ \
     && cp -r share/* /usr/local/share/
 
@@ -137,9 +162,18 @@ RUN curl -s -L \
 
 # Install Blast+ v2.10.0 in /usr/local
 RUN curl -s -L \
-    https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.0/ncbi-blast-2.10.0+-x64-linux.tar.gz \
+    https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz \
     | tar -xzf - -C /usr/local \
-    && ln -s /usr/local/ncbi-blast-2.10.0+/bin/* /usr/local/bin
+    && ln -s /usr/local/ncbi-blast-2.13.0+/bin/* /usr/local/bin
+
+# R
+RUN wget -c https://cloud.r-project.org/src/base/R-4/R-4.2.3.tar.gz \
+        && tar -zxf R-4.2.3.tar.gz \
+        && cd R-4.2.3 \
+        && ./configure \
+        && make -j9 \
+        && make install
+
 
 # ----------------------------------------------------------------------
 #
@@ -147,26 +181,23 @@ RUN curl -s -L \
 # gunk so that it is a leaner docker image.
 #
 # ----------------------------------------------------------------------
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
-# Add R package repository
-RUN apt-get -y update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get -y --no-install-recommends install \
-      gnupg \
-      software-properties-common \
-      dirmngr \
-    && \
-    apt-key adv --keyserver keyserver.ubuntu.com \
-      --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
-    && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+# Install locales package
+
+# Set locale settings
+ENV LANGUAGE=en_US.en
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN apt-get update && apt-get install -y locales && \
+	sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \
+	dpkg-reconfigure --frontend=noninteractive locales && \
+	update-locale LANG=$LANG
 
 # sorter needs pandas and biopython
 RUN apt-get -y update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -y --no-install-recommends install \
-      bioperl \
       bowtie2 \
       build-essential \
       bwa \
@@ -180,56 +211,68 @@ RUN apt-get -y update && \
       libpng-dev \
       libssl-dev \
       libxml2-dev \
+      bedops \
       python3 \
       python3-biopython \
       python3-idna \
       python3-pandas \
       python3-pymummer \
-      r-base \
+      python3-pip \
+      bedtools \
       zlib1g \
       && \
     apt-get clean
 
-COPY --from=build /usr/local /usr/local
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
-#install bedtools
-RUN apt-get -y install \
-    bedtools \
-    && \
-    apt-get clean
+# downgrade numpy for deprecated np.bool
+RUN pip3 install numpy==1.23.1
+
+COPY --from=build /usr/local /usr/local
 
 # Install AliTV
 
 # AliTV needs libyaml-perl libhash-merge-perl bioperl perl cpanm lastz
-RUN apt-get -y install \
+RUN apt-get -y update && \
+  DEBIAN_FRONTEND=noninteractive \
+  apt-get -y --no-install-recommends install \
     libyaml-perl \
     libhash-merge-perl \
     bioperl \
     perl \
-    cpanminus \
-    && \
-    apt-get clean
+    wget \
+    git \	
+    cpanminus && \
+  apt-get clean
+
+#RUN cpan FindBin::Real
+#RUN cpan Log::Log4perl
+#RUN cpanm JSON
+#RUN cpanm Bio::Perl Bio::FeatureIO
 
 # Download, compile and install lastz
-RUN apt-get -y install \
-    wget \
-    && \
-    apt-get clean
+#RUN wget https://github.com/lastz/lastz/archive/1.04.22.tar.gz && \
+#	tar -xf 1.04.22.tar.gz && \
+#	cd lastz-1.04.22 && \
+#	make && \
+#	make install
+	# remove -Werror from Makefile to fix compile errors
+#	sed -i 's/-Werror //' src/Makefile && \
+#	make && \
+#	install -m 0755 src/lastz /usr/local/bin/ && \
+#	install -m 0755 src/lastz_D /usr/local/bin/ && \
+#	cd .. && rm -rf lastz-*
 
-RUN wget https://github.com/lastz/lastz/archive/1.04.00.tar.gz && \
-tar -xf 1.04.00.tar.gz && \
-cd lastz-1.04.00 && \
-# remove -Werror from Makefile to fix compile errors
-sed -i 's/-Werror //' src/Makefile && \
-make && \
-install -m 0755 src/lastz /usr/local/bin/ && \
-install -m 0755 src/lastz_D /usr/local/bin/ && \
-cd .. && rm -rf lastz-*
-
+#WORKDIR /app
+#COPY . /app
+#ENV PERL5LIB="/app/lib:${PERL5LIB}"
 
 # AliTV v1.0.6 install
-RUN wget https://github.com/AliTVTeam/AliTV/archive/v1.0.6.tar.gz && \
-tar -xf v1.0.6.tar.gz
+#RUN git clone https://github.com/AliTVTeam/AlitTV-perl-interface && \
+#	cd AliTV-perl-interface \
+#	cpanm --installdeps .
+
+#RUN chmod 755 AliTV-perl-interface-1.0.6/bin/alitv.pl
 
 # Install chromoMap
 RUN R -e "install.packages('chromoMap', repos = 'http://cran.us.r-project.org')"

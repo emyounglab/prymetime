@@ -10,6 +10,6 @@ cp "$EXECDIR"/alitv.yml "$1"
 cp "$2" "$1"
 cd "$1"
 cp "$2" reference.fasta
-cp "$1"_final.fasta prymetime_assembly.fasta
+cp "$PREFIX"_final.fasta prymetime_assembly.fasta
 
-perl ~/AliTV/AliTV-perl-interface/bin/alitv.pl --project "$1" alitv.yml
+perl ~/AliTV-perl-interface-1.0.6/bin/alitv.pl --project "$PREFIX" alitv.yml

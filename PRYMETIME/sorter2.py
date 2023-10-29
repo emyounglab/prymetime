@@ -21,16 +21,16 @@ for x in range(0, len(df.index)):
 
 ### Make a fasta file of only the circular contigs ###
 ######################################################
-fasta_sequences = SeqIO.parse(open("accept.fasta"),'fasta')
+fasta_sequences = SeqIO.parse(open("assembly.fasta"),'fasta')
 
-cir_seqs = [x for x in fasta_sequences if circ_D[x.id] is "Y"]
+cir_seqs = [x for x in fasta_sequences if circ_D[x.id] == "Y"]
 
 SeqIO.write(cir_seqs , "cir_contigs.fasta", "fasta")
 
 ### Make a fasta file of only the linear contigs ###
 ####################################################
-fasta_sequences = SeqIO.parse(open("accept.fasta"),'fasta')
+fasta_sequences = SeqIO.parse(open("assembly.fasta"),'fasta')
 
-lin_seqs = [x for x in fasta_sequences if circ_D[x.id] is 'N']
+lin_seqs = [x for x in fasta_sequences if circ_D[x.id] == 'N']
 
 SeqIO.write(lin_seqs , "lin_contigs.fasta", "fasta")

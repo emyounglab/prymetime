@@ -1,11 +1,12 @@
 #!/bin/bash
+#SBATCH --mem-per-cpu=1000MB
 
 #fail if there's a typo in variable names
 set -u
 #fail if any command fails
 set -e
 
-MIN_COVERAGE_DEPTH=10
+MIN_COVERAGE_DEPTH=50
 
 log() {
     echo "[$( date '+%Y-%m-%d %H:%M:%S' ) $( basename ${BASH_SOURCE[0]} )]: $1"

@@ -13,8 +13,8 @@ set -u
 #fail if any command fails
 set -e
 
-PREFIX=$(basename "$4")
-cd "$4"
+PREFIX=$(basename "$2")
+cd "$2"
 
 if [[ -e "./cir_rep_contigs.fasta" ]]; then
 
@@ -22,24 +22,11 @@ if [[ -e "./cir_rep_contigs.fasta" ]]; then
 
 	if [[ -s "./cir_rep_contigs.fasta" ]]; then
 
-	  echo "circular repetitve contigs found, performing Unicycler"
+		echo "circular repetitve contigs found, performing Unicycler"
 
-	  cd unicycler
+		cd unicycler
 
-	  for f in *.fasta; do
-	    minimap2 -t ${N_THREADS} -ax map-ont "$f" "$1" | samtools fastq --threads ${N_THREADS} -n -f 4 - > "$f"_nano_map.fastq
-
-	    bowtie2-build --threads ${N_THREADS} "$f" "${f}-idx"
-	    bowtie2 -x "${f}-idx" --threads ${N_THREADS} --no-unal -1 "$2" -2 "$3" | samtools fastq --threads ${N_THREADS} -n -f 2 -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -
-	    rm -f "${f}-idx"*.bt2
-
-	    if [[ -s "${f}"_ill_map_1.fastq ]]; then
-
-	    unicycler --threads ${N_THREADS} -1 "$f"_ill_map_1.fastq -2 "$f"_ill_map_2.fastq -l "$f"_nano_map.fastq -o "$f"_unicycler
-
-	    fi
-
-	  done
+		unicycler --threads ${N_THREADS} -l "$1" -o "$f"_unicycler
 
 	  cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
@@ -58,19 +45,20 @@ if [[ -e "./cir_rep_contigs.fasta" ]]; then
 
 	  echo "WARNING: no circular contigs, treat only linear"
           seqkit seq polished_contigs.fasta -m 1000  > polished_contigs_filtered.fasta
-	  seqkit rename polished_contigs_filtered.fasta | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
+	  seqkit rename polished_contigs_filtered.fasta | seqkit sort --by-length --reverse \
+		| seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
 
 	fi
 
 else
-	cd "$4"
+	cd "$2"
 	mkdir -p unicycler
 
 	cd unicycler
 
 	echo "WARNING: only linear contigs found, performing Unicycler only"
 
-        unicycler --threads ${N_THREADS} -1 "$2" -2 "$3" -l "$1" -o "$PREFIX"_unicycler
+        unicycler --threads ${N_THREADS} -l "$1" -o "$PREFIX"_unicycler
 
         cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
