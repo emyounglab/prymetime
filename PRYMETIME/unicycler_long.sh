@@ -26,7 +26,7 @@ if [[ -e "./cir_rep_contigs.fasta" ]]; then
 
 		cd unicycler
 
-		unicycler --threads ${N_THREADS} -l "$1" -o "$f"_unicycler
+		unicycler --threads ${N_THREADS} -l "$1" -o "$PREFIX"_unicycler
 
 	  cat *_unicycler/assembly.fasta > ../unicycler_contigs.fasta
 
