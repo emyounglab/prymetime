@@ -48,7 +48,7 @@ if [[ -e "./cir_rep_contigs.fasta" ]]; then
 	  cat unicycler_contigs.fasta polished_contigs.fasta > "$PREFIX"_comb.fasta
 
 	  # seqkit has threads on by default
-	  seqkit seq "$PREFIX"_comb.fasta -m 1000 > "$PREFIX"_comb_filtered.fasta
+	  seqkit seq "$PREFIX"_comb.fasta -m 5000 > "$PREFIX"_comb_filtered.fasta
 	  seqkit rename "$PREFIX"_comb_filtered.fasta | seqkit sort --by-length --reverse \
 		| awk '/^>/ {if (/circular=true/) \
 		{printf(">scaffold_%d_circ\n", ++i)} \
@@ -57,7 +57,7 @@ if [[ -e "./cir_rep_contigs.fasta" ]]; then
 	else
 
 	  echo "WARNING: no circular contigs, treat only linear"
-          seqkit seq polished_contigs.fasta -m 1000  > polished_contigs_filtered.fasta
+          seqkit seq polished_contigs.fasta -m 5000  > polished_contigs_filtered.fasta
 	  seqkit rename polished_contigs_filtered.fasta | seqkit sort --by-length --reverse | seqkit replace -p '.+' -r 'scaffold_{nr}' > "$PREFIX"_final.fasta
 
 	fi
@@ -77,7 +77,7 @@ else
         cd ../
 
         # seqkit has threads on by default
-        seqkit seq unicycler_contigs.fasta -m 1000 > unicycler_contigs_filtered.fasta
+        seqkit seq unicycler_contigs.fasta -m 5000 > unicycler_contigs_filtered.fasta
         seqkit rename unicycler_contigs_filtered.fasta | seqkit sort --by-length --reverse \
               | awk '/^>/ {if (/circular=true/) \
 	      {printf(">scaffold_%d_circ\n", ++i)} \
