@@ -54,28 +54,17 @@ Run Prymetime assembly pipeline
 docker run -it --rm \
     -v /path/to/input_dir:/input \
     -v /path/to/output_dir:/output \
-    prymetimev2 \
-    -nanopore /input/my_nanopore.fastq \
+    prymetime \
+    -long /input/my_long.fastq \
     -illumina_1 /input/my_illumina_1.fastq \
     -illumina_2 /input/my_illumina_2.fastq \
-    -genome-size my_genome_size \
     -outdir /output/my_directory
+    -preferred_assembly short \ # indicates bacterial assembly, remove for yeast
+    -read_type <type> \ # include if using only <long> or <short> reads or <assembly> for inputting pre-assembled genome for eng_sig identification
+    -eng_sig ~/path/to/bacterial_signatures.fna \ # optional
+    -ref_genome ~/path/to/output/GCF_001456255.1.fna # optional
 ```
 The final genome assembly will be the my_directory_final.fasta file.
-
-Run Prymetime with engineering signatures search
-```shell
-docker run -it --rm \
-    -v /path/to/input_dir:/input \
-    -v /path/to/output_dir:/output \
-    prymetimev2 \
-    -nanopore /input/my_nanopore.fastq \
-    -illumina_1 /input/my_illumina_1.fastq \
-    -illumina_2 /input/my_illumina_2.fastq \
-    -genome-size my_genome_size \
-    -outdir /output/my_directory \
-    -eng_sig /input/my_eng_sig.fasta
-```
 
 The -eng_sig option will also produce a PDF displaying engineering signatures that were found in the genome assembly, shown below:
 
