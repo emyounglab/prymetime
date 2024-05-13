@@ -10,11 +10,6 @@ Additionally, this Docker image can be wrapped in a Singularity image to run on 
 
 ## Build Singularity image
 
-Download Prymetime repo
-```shell
-git clone https://github.com/emyounglab/prymetime.git
-```
-
 Build Singularity image
 ```shell
 singularity build prymetime docker://sjtrauber/prymetime:v2
@@ -29,7 +24,7 @@ singularity run \
         -illumina_1 ~/path/to/illumina_1.fastq \
         -illumina_2 ~/path/to/illumina_2.fastq \
         -outdir ~/path/to/output \
-	    -preferred_assembly short \ # indicates bacterial assembly, remove for yeast
+	-preferred_assembly short \ # indicates bacterial assembly, remove for yeast
     	-read_type <type> \ # include if using only <long> or <short> reads or <assembly> for inputting pre-assembled genome for eng_sig identification
         -eng_sig ~/path/to/bacterial_signatures.fna \ # optional
         -ref_genome ~/path/to/output/GCF_001456255.1.fna # optional
